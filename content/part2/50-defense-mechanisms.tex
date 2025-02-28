@@ -1,0 +1,69 @@
+\chapter[Mitigating Obfuscation Attacks]{Mitigating Automated Obfuscation Attacks}\label{cha:defense}
+
+As automated obfuscation attacks become increasingly sophisticated, robust defense mechanisms in software plagiarism detection systems are more vital than ever. In this chapter, we address this critical challenge by presenting defense mechanisms to enhance the resilience of these systems against various obfuscation strategies (\contribution{3}). All defense mechanisms discussed in the following apply to any token-based plagiarism detection system. As previously mentioned in \autoref{sec:SPD}, all state-of-the-art approaches used in practice fall into this category. Furthermore, the defense mechanism can also be applied to other structure-based detection approaches with little adaption needed.
+
+
+The remainder of the chapter is structured as follows.
+To effectively mitigate the risks posed by automated obfuscation, we first outline the specific requirements that defense mechanisms must meet.
+%
+The core of this chapter is dedicated to three novel defense mechanisms, each tailored to counter distinct types of obfuscation attacks:
+
+\begin{description}
+    \item[{Token Sequence Normalization}~\cite{Saglam2024b}] (see \autoref{sec:tsn}) utilizes specialized graphs to generate a normalized token sequence that is invariant to insertion- and reordering-based attacks. It combines the benefits of graph-based and token-based approaches by leveraging graph-based techniques to normalize the linear token sequence.
+
+    \item[{Subsequence Merging}~\cite{Saglam2024c}] (see \autoref{sec:smm}) reverses obfuscation attacks by heuristically combining neighboring subsequences matches. Its attack-independent nature allows it to reverse the effects of a broad spectrum of obfuscation attacks, making it applicable to both programming and modeling assignments.
+
+    \item[{Model Subtree Reordering}~\cite{Saglam2024a}] (see \autoref{sec:msr}) is specifically designed for modeling artifacts, such as \ac{EMF} metamodels or \ac{UML} models. The mechanism employs a multi-step algorithm that normalizes the order of nodes in the model tree, effectively countering reordering attacks.
+\end{description}
+
+In addition to these primary mechanisms, the chapter also explores other, less effective defense strategies. While these alternative approaches offer some protection, they have notable downsides or are less effective than our primary defense mechanisms.
+
+
+\ownpublications{
+\fancycite{Saglam2024b},
+\fancycite{Saglam2024a},\\
+\fancycite{Saglam2024d}, and
+\fancycite{Saglam2024c}.
+}
+
+\section{Requirements}\label{sec:tsn-requirements}
+Before we discuss our different defense mechanisms against obfuscation attacks, we want to highlight the key requirements for such mechanisms.
+These requirements are directly derived from the obfuscation attack threat model introduced in \autoref{cha:threatmodel}.
+%
+In addition to these imperative requirements, language dependence is an important factor to discuss, as it greatly affects the applicability of any given defense mechanism.
+
+For any normalization approach to be applicable in real-world scenarios, it must meet the following requirements.
+Firstly, it must operate at an {abstract level}, focusing on tokens rather than code.
+Furthermore, it must support {explainability}~\cite{Karnalim2021} via traceability between input programs and the computed matches and similarity scores, allowing for the visualization of potential plagiarism with the original, {unaltered program}.
+The fact that it is unaltered is essential from both ethical and administrative perspectives~\cite{Simon2016}, as it ensures that the original code remains the basis for human decision-making in plagiarism detection~\cite{Le2013}.
+Furthermore, the altered code may no longer contain \textit{idiosyncrasies} (e.g., obvious obfuscation attempts) that assist the decision-making~\cite{Novak2019}.
+Consequently, normalization approaches that modify the input programs as pre-processing steps are not applicable.
+Existing code normalization approaches, such as dead code elimination with program dependence graphs, do not meet these requirements.
+
+\begin{description}
+    \item[Language-Dependence] Implementing a defense mechanism as a pre-processing step for the input programs is language-specific, necessitating a newly designed mechanism for each supported language. This is tedious and costly, and thus, a defense mechanism should be \textit{language-independent}, ensuring versatility across programming languages. However, the more language-independent an approach is, the more abstract the information on which it operates. This abstraction provides a challenge that needs to be addressed to avoid affecting the effectiveness of the defense mechanism. At a minimum, the approaches should be \textit{language-agnostic}, meaning they require some adaption for each language but do not require a complete redesign.
+    %Our approach is language-independent, ensuring versatility across languages.
+    
+    \item[Abstraction Level] For seamless integration into token-based approaches, any defense mechanism must operate at an abstract level, focusing on tokens rather than code, enabling the capture of structural similarities while minimizing the influence of language-specific syntax~\cite{prechelt2002, liu2006, Nichols2019}. 
+    %
+    This abstraction allows the defense mechanism to generalize across different programming languages, making it versatile and broadly applicable. By focusing on the structural patterns of the code rather than its specific syntax, the mechanism operates on the same level as the detector. This avoids depending on vulnerable information, e.g., variable names or types, that can be used as an additional attack vector.
+
+    \item[Explainability] Any defense mechanism must preserve explainability~\cite{Karnalim2021}, meaning there should always be the ability to understand the similarity score, how it was computed, and which parts of the input programs are similar or dissimilar. This requirement is crucial for maintaining transparency and ensuring educators and other stakeholders trust the detection process. This includes providing clear insights into the matching process and highlighting the code fragments contributing to the final similarity score. In many countries, academic misconduct investigations are led by administrative staff~\cite{Simon2016}. In these cases, explainability is especially critical.
+
+    \item[Preserving Originality] In plagiarism detection, plagiarism detectors must deliver evidence based on the input programs. 
+    It becomes difficult to convince non-expert staff when using altered programs as the basis of an argument~\cite{Le2013}. Accused individuals may rightfully assert that the altered programs are not what they originally submitted, thus hindering explainability.
+    Moreover, when using pre-processed or altered programs for result visualization, the programs might seem more similar to the human observer than they were initially.
+    Thus, the original, unaltered code must be used for human decision-making~\cite{Le2013}.
+    Ideally, the subsequence matching and similarity calculation is resilient to obfuscation attacks, but the original, unaltered code is used to visualize these results.
+    
+    \item[Preserving Idiosyncrasies] Similarly, when the altered code is used for the visualization, some idiosyncrasies of the original programs (e.g., obvious obfuscation attempts) are no longer present. However, these idiosyncrasies are often used as evidence for both initial decision-making and presentation of evidence in misconduct investigations and the related hearing with the students~\cite{Novak2019, Denzler2024}. Hence, relying on altered code renders presenting a compelling argument in a plagiarism case considerably more challenging. It thus negatively affects human decision-making.
+    
+    \item[Automation] In software plagiarism detection, the similarity calculation must be fully automated to effectively tackle the problem at scale. A defense mechanism that breaks this property and requires human intervention during the pairwise comparison becomes inapplicable at scale. Automation ensures that the defense mechanism can handle the data of large courses efficiently. Human decision-making should only begin once the results are presented, allowing for scalable and efficient plagiarism detection.
+     
+\end{description}
+
+
+\input{content/part2/51-token-sequence-normalization}
+\input{content/part2/52-subsequence-match-merging}
+\input{content/part2/53-subtree-reordering}
+\input{content/part2/54-other-approaches}

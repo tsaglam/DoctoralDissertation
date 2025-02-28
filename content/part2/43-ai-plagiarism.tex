@@ -1,0 +1,134 @@
+\section{Exploiting Generative AI for Modeling Plagiarism}\label{sec:ai-plagiarism}
+
+In the previous section, we explored which techniques novice modelers employ to manually obfuscate artifacts of modeling assignments. We identified various techniques they employed to conceal their plagiarism and discussed the challenges this poses for detection. While these insights provide a valuable foundation on human obfuscation methods and highlight the complexity and creativity involved, it is crucial how such obfuscation techniques can be automated. The rapid advancement of generative artificial intelligence, particularly via \acp{LLM}, introduces a new dimension to this issue.
+
+\acp{LLM}, such as \ac{GPT} and its successors, have demonstrated remarkable capabilities in generating and transforming text, including code and other structured data~\cite{Camara2023}. These models can potentially be exploited to cheat in modeling assignments~\cite{Biderman2022}. Given their ability to consider domain context and produce human-like modifications, the use of generative artificial intelligence might not be trivial to detect~\cite{Daun2023}.
+
+Understanding how AI-based techniques can be leveraged to obfuscate modeling plagiarism will help us develop more robust detection mechanisms. In this section, we thus explore the potential use of AI for obfuscating modeling assignments.
+
+\subsection{Feasibility and Techniques}
+% INTRODUCTION
+Although large language models have existed for some time, ChatGPT~\cite{ChatGPT} was the first to combine natural-language capacities with a simple user interface in the form of a chatbot.
+This makes ChatGPT especially feasible for plagiarism, as other plagiarism generators~\cite{DevoreMcDonald2020} have been less approachable.
+Thus, we investigate whether ChatGPT and other \ac{LLM}-based tools can be effectively exploited for plagiarism.
+Unlike other plagiarism generators~\cite{DevoreMcDonald2020} and \acp{LLM} that have been less accessible, ChatGPT is widely available, easy to use, and popular among students \cite{ChatGPTGuide}. The techniques explored in this section, however, apply to other \acp{LLM} and tools based on generative AI, which allow for a natural language command as input, often referred to as prompt.
+We show the feasibility of leveraging it for modeling plagiarism, requiring only a minimal understanding of modeling concepts.
+%
+% CHATGPT AND MODELING
+Besides natural language capabilities, ChatGPT can describe, summarize, and generate programs and other technical artifacts, such as \ac{XMI}~\cite{Daun2023} code.
+Thus, it can generate syntactically correct models for any language, often closely resembling a semantically correct solution created by humans." This can then be exploited for plagiarizing modeling assignments.
+Based on our threat model (see \autoref{def:obfuscating-preexisting-solutions} and \autoref{def:assignment-driven-geenration}), there are generally two ways of using generative AI to cheat for modeling assignments:
+\begin{enumerate}
+    \item Assignment-Driven Generation: The plagiarizer uses the assignment's description to generate a complete solution using generative AI.
+    \item Obfuscating Preexisting Solutions: The plagiarizer provides a preexisting solution and prompts generative AI to generate an obfuscated version.
+\end{enumerate}
+Whether the first technique constitutes plagiarism is still a subject of debate~\cite{Anders2023}, while the latter closely aligns with human plagiarism practices \cite{Novak2019}.
+To determine how viable these approaches are, we explored both options\footnote{We used version 3.5 for the full generation, and version 3.0 and 3.5 for the obfuscation.} for a typical~\cite{Ciccozzi2018} metamodeling assignment~\cite{Saglam2022}.
+It tasks students with creating an \ac{EMF} metamodel for designing component-based system architectures.
+
+\subsection{Fully-Generating a Solution}
+
+\label{subsec:chatgpt-full}
+We tasked ChatGPT to generate a solution from scratch by providing the full assignment description (we converted the assignment PDF into plain text).
+We used the metamodeling assignment regarding designing component-based system architectures, which we also used for our previously mentioned experiment (see \autoref{sec:human-plagiarism-task}).
+For prompt engineering, we approached ChatGPT with the mind of a novice student modeler~\cite{Saglam2023}.
+We systematically tested multiple prompts where the most expedient was directly asking for an \ac{EMF} metamodel that satisfies the description and is provided as syntactically correct XMI:
+\begin{myquote}
+    \textit{Please create an Ecore metamodel that meets the following description and provide its \ac{XMI} code with the correct syntax for opening the \ac{XMI} file via \ac{EMF} in Eclipse: [Assignment Text]}
+\end{myquote}
+Further inquiries, e.g., suggestions for improvement or correction, did not enhance the result quality\footnote{For details refer to \cite{Saglam2023} and \cite{Saglam2023_supp}.}.
+Using this prompt, we conducted twenty sessions using two separate accounts. After each solution, we regenerated the next most likely response. We requested a single re-generation per session if it produced incoherent output, i.e., invalid \ac{XMI} code. 
+In cases where ChatGPT stopped generating mid-model, we prompted it to continue.
+%
+Although we were able to generate 36 EMF-compatible solutions using ChatGPT, none fulfilled the assignment.
+First, most of them contained a plethora of syntactical issues, including incorrect assignments of primitive types to attributes, improper assignment of reference types, duplicate names of structural features in types and super types, invalid lower bound cardinalities (e.g., a lower bound of -1), missing instance type names for enumerations, and packages lacking namespace \ac{URI} and prefix.
+%
+Second, all solutions were semantically insufficient, missing some essential elements. Incorrect modeling of relations between concepts and improper use of enumerations were common themes. Comparatively, the generated solutions contain about half as many classifiers and references as human solutions.
+
+To evaluate the solutions regarding completeness and originality, we randomly selected a subset consisting of seven ChatGPT-generated and three human solutions and asked the course instructor to review them. The instructor was unaware that some of the metamodels were generated.
+%
+We asked the instructor to review the metamodels regarding their originality and whether they would accept the metamodels as valid solutions. We did not tell them that some of the metamodels were generated.
+We employed the \textit{Think Aloud} method for the review, asking the instructor to verbalize their thoughts and actions.
+%
+This process is similar to the experiment setup described in~\cite{Saglam2023}, where we conducted a similar experiment on human plagiarism. We asked a course instructor to check metamodels regarding their originality and validity as a solution.
+%
+The instructor reviewed the solutions individually and arranged them side by side. They initially examined the overall structure and package partitioning. Within packages, they specifically checked for the presence of elements described in the task.
+%
+They accepted only the three human solutions, as the other solutions contained errors and missed crucial concepts of the assignment.
+%
+They noted that the generated solutions appeared similar, with small sizes and minimal structuring into packages.
+
+The similarity can be attributed to the recurring patterns in correctly modeled concepts and the occurring syntactical and semantical issues.
+ChatGPT exhibits some degree of determinism in its outputs, which is due to the inherent indeterminism in generative AI. While large language models are, by design, not entirely deterministic (their output variability is often controlled by parameters like \textit{temperature}, which influences the level of "creativity" in responses\footnote{Large language models achieve indeterminism through controlled randomness, mainly by using sampling methods over the most likely outputs and adjusting the temperature parameter. The temperature scales word probabilities by adjusting the probability distribution curve~\cite{Ouyang2023}.}); they exhibit a level of determinism that is strong enough that, given the same assignment, the outputs are similar enough for the context of plagiarism detection. Note that ChatGPT does not allow temperature control.
+To further examine this, we used our approach to compare the similarity of generated and human solutions.
+The results are shown in \autoref{tab:summary-fully}.
+The values indicate that, despite their small size and issues, generated solutions are notably more similar than unrelated human solutions.
+This shows that our approach can effectively detect many of these generated solutions.
+In summary, fully generating solutions works for small assignments, but the results are inadequate and easily detectable.
+
+\begin{table}
+		\centering
+		\begin{tabular}{lcccccc}
+			\toprule
+			{Type}             & {Median} & {Mean}  & {25\% Perc.} & {75\% Perc.} & {Maximum} \\
+			\midrule
+			Human   & 18.25        & 19.75          & 12.21       & 25.35   & 58.15    \\
+			ChatGPT & 35.37        & 36.97          & 26.23       & 47.60    & 86.84  \\
+			\bottomrule
+		\end{tabular}
+        \caption[Similarity of Human vs. AI-Generated Solutions]{Similarity in percent of unrelated human originals compared to the similarity of the solutions generated with ChatGPT.}
+		\label{tab:summary-fully}
+\end{table}
+
+
+\subsection{Obfuscating a Preexisting Solution}
+
+\label{subsec:chatgpt-obf}
+To obfuscate a preexisting solution, we provide ChatGPT only with a solution in \ac{XMI} form and define a prompt with instructions to alter the structure of the solution to conceal the plagiarism while retaining semantics to fulfill the assignment.
+We applied this approach to solutions from the modeling course: a monolithic one with all elements in a single file and a fragmented one with elements distributed across five files in various packages.
+We generally observed a stronger obfuscation for the fragmented solution, which may relate to the semantic cohesion of the concepts modeled in the same package.
+%
+We applied twelve different prompts in independent sessions for each solution, thus generating twelve plagiarized metamodels.
+The following is an example of such a prompt:
+\begin{myquote}
+%\small
+\textit{Change the following \ac{EMF} metamodel in \ac{XMI} format to look like a different one that models the same concepts.
+Show changed lines, including a description and the line number.}
+\end{myquote}
+
+% MODIFICATIONS ----------------------- 
+%\noindent
+ChatGPT employs various modifications to alter the solution, detailing what part of the \ac{XMI} code changed.
+These modifications included inserting single classes, attributes, and references, deleting elements and their contained elements, re-ordering elements in containment references, and moving attributes or references to newly inserted superclasses. ChatGPT also moved classes and datatypes to different packages and renamed elements by abbreviating or removing abbreviations, using synonyms, or adding prefixes and suffixes based on the domain. Moreover, it changed the properties of existing elements, such as multiplicities, and added references to classes that referred to either existing or new classes. Vice versa, it added new classes containing multiple attributes and meaningful references to new and existing classes.
+%
+It often made complex changes by adding sizable structures that had semantic relevance to the solution's domain.
+One example that arose multiple times included adding a new class named \texttt{Node} with a one-to-many relationship to the existing class \texttt{Links} and a many-to-one relationship to \texttt{Container}. Additionally, ChatGPT modified the \texttt{Links} class to depict a directed link between two nodes:
+%
+\begin{myquote}
+     \textit{I added a new \texttt{EClass} called \texttt{Node} with a one-to-many relationship with \texttt{Links} and a many-to-one relationship with \texttt{Container}. The new class will represent the environment's nodes. Change the \texttt{Links} class to represent a directed link between two nodes. Add two references, \texttt{source} and \texttt{target}, to represent the endpoints.}
+\end{myquote}
+
+% EX 0
+\noindent
+In one example, ChatGPT inserted a new subclass \texttt{SystemComponent} of an existing class \texttt{Component} and added a reference \texttt{partOf} which referenced an existing class \texttt{System}.
+% EX 1
+In another one, a new abstract class called \texttt{NamedElement} with an attribute called \texttt{name} was inserted.
+Then, it introduced this class as a supertype for several existing classes that removed their \texttt{name} attribute, effectively deduplicating the attributes.
+
+
+Most of these changes are not immediately apparent, as they fit the assignment's domain.
+Even if modeling issues occurred, they were insignificant enough to be considered plausible human mistakes.
+Only in about one in ten cases were the changes immediately conspicuous, and for those instances, it was due to chosen element names lacking logical coherence (such as renaming from \texttt{Deployment} to \texttt{DeploymentNew}).
+%
+We found that ChatGPT generated minor syntactical issues (for example, type declaration that still references the original name of a renamed element) in some cases, but for the most part, it produced correct metamodels that were well-obfuscated according to our instructions.
+In contrast to the technique of fully generating, ChatGPT seems to thrive on the given metamodel, thus avoiding most issues discussed in \autoref{subsec:chatgpt-full} by replicating what already exists.
+
+%\todo{(LOW) Create figures for examples}
+
+\subsection{Key Takeaways}
+
+In summary, while we can fully generate solutions for modeling assignments with ChatGPT, they are inadequate, stand out to the human eye, and are likely to get flagged during tool-based inspection.
+Recent studies reached the same conclusion \cite{Camara2023}.
+However, given a preexisting solution, the usefulness of ChatGPT increases. It can convincingly summarize the modeled domain and its structure and concepts. Moreover, using ChatGPT allows us to perform complex changes, providing high flexibility in generating obfuscated models.
+%
+While fully generating solutions might become feasible in the future, cheating via plagiarism by obfuscation currently seems the most feasible strategy, as it requires little modeling knowledge and produces well-obfuscated plagiarism that is inconspicuous for humans.

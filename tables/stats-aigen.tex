@@ -1,0 +1,16 @@
+\begin{table}[h]
+\centering
+\small
+%\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lrrrrrrrr}
+  \toprule
+Dataset & Variant & Pairs & $p$ & $W$ & $\delta$ & $\delta\,Int.$ & $\delta$ 95\% CI & n \\ 
+  \midrule
+   \multirow{3}{*}{{TicTacToe}} & TSN & FG & 1 & 120,687 & -0.072 & Negligible & [-0.12, -0.03] & 1,225 \\ 
+    & SMM & FG & < 1e-10 & 334,971 & 0.271 & Small & [0.23, 0.31] & 1,225 \\ 
+    & Both & FG & < 1e-10 & 416,672 & 0.256 & Small & [0.21, 0.30] & 1,225 \\ 
+   \bottomrule
+\end{tabular}
+\caption[Statistical Tests: AI-based Generation]{One-sided Wilcoxon signed-rank test results for \textbf{AI-based generation} regarding the improvement by our defense mechanism compared to baseline (sig. level of $\alpha=0.05$, alternative hypothesis $H1=greater$, test statistic $W$, effect size via Cliff's delta $\delta$, its interpretation $\delta\,Int.$, its 95 percent confidence interval $CI$, and the sample size $n$). For Fully-Generated Pairs (FG), low $p$ and high $\delta$ are desirable.} 
+\label{tab:to-base-gpt-gen}
+\end{table}

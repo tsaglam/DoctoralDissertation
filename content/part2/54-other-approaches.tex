@@ -1,0 +1,43 @@
+\section{Exploring Additional Defense Mechanisms}\label{sec:other-defense}
+This section briefly mentions additional defense mechanisms we explored alongside those mentioned in the previous sections. However, the now-mentioned defense mechanisms have limited language independence or do not fulfill the essential requirements defined in \autoref{sec:tsn-requirements}.
+Despite these approaches not being the core contributions of this dissertation, we still want to provide an overview of them. %Furthermore, we compare them to our primary defense mechanisms.
+
+\textbf{Structural Normalization via Code Property Graphs}~\cite{Maisch2024}: We explored an approach to extracting the token sequence of programs from code property graphs instead of parse trees. Before tokenization, we normalize the code property graphs via graph transformations to counter semantic-preserving refactoring-based obfuscation attacks.
+This includes refactoring operations like extracting expressions as variables or constants, introducing constant container classes, swapping if-else statements and inverting the corresponding conditions, inserting methods and constructors, and introducing access methods for existing fields.
+Similarly to tokens, the sequence normalization approach can also be used to normalize the order of statements and to remove dead code. This approach can be seen as an extension of token sequence normalization. However, it is entirely language-dependent, as tokenization is based on code property graphs, and the corresponding transformations have to be defined for each programming language.
+
+\textbf{Normalization via LLVM IR}~\cite{Heneka2023}: LLVM uses an intermediate representation language resembling assembly code. LLVM supports transforming code in multiple languages into LLVM IR code. During this transformation, code can be heavily optimized. This includes, for example, dead code removal. We investigated plagiarism detection via this intermediate representation. While it does provide resilience for specific obfuscation attacks, it has some drawbacks. First, the LLVM IR code is platform-dependent; thus, the results vary depending on the system architecture. Second, only some languages are supported by LLVM. Finally, the visualization limits the approach, as it shows matches on the IR code. This approach resembles the approach proposed by \citet{DevoreMcDonald2020} of using assembly code for plagiarism detection.
+
+\textbf{Compiler-based Preprocessing}~\cite{krieg2022}: Some compilers provide aggressive preprocessing techniques to optimize program code. This often includes dead code removal and could be used to reduce the impact of some obfuscation attacks. However, this is a pure pre-preprocessing technique (thus falling short for nearly all requirements defined in \autoref{sec:tsn-requirements}) that is strongly language-dependent and provides only limited resilience.
+
+These defense mechanisms provide obfuscation resilience but have disadvantages regarding language dependence or the abovementioned requirements. In the following, we also mention two approaches that are not sufficiently effective in providing obfuscation resilience.
+
+\textbf{Pre-matching Token Filtering}~\cite{krieg2022}: We explored an approach based on sliding windows that filter the token sequences before the actual subsequence matching to reverse the splitting of matches. This heuristic approach was computationally expensive and only somewhat effective when combined with other defense mechanisms. However, this approach inspired our approach of merging subsequence matches. Both approaches share that they are language-independent and attack-independent.
+    
+\textbf{Token Transformation Patterns}~\cite{krieg2022}: Here, we explored defining a set of token patterns based on the different token types that, if detected in a token subsequence, would lead to the removal of tokens. An example would be the removal of all tokens between a return statement and the end of a block or method. However, these patterns are strongly token-dependent and only provide resilience for specific obfuscation attacks. This only provides limited resilience even among a single attack type, such as insertion-based obfuscation.
+
+\endinput
+
+
+
+\begin{table}[b]
+	\centering
+	\footnotesize
+	\begin{tabular}{p{4cm}ccccc}
+		\hline
+		Defense Mechanisms & Target & Lang.-Ind. & Eff. & Scope & Obfucations \\
+		\hline
+	    SMM & Both & ++ & ++ & Wide & Any \\ 
+		TSN & Code & + & +++ & Narrow & Insertion, Reordering \\
+		MSR & Models & + & ++ & Narrow & Reordering \\ 
+		Intermediate Representation & Code & o & + & Wide-ish & Many \\ 
+         \hline
+		Code Property Graphs & Code & o & ++ & Narrow & Refactoring \\ 
+		Compiler-based Pre-Processing & Code & $--$ & o & Narrow & Insertion \& Others \\ 
+		Token Transformation Patterns & Code & $--$ & - & Narrow & Insertion \& Others \\
+		Token Sequence Filtering & Both & ++ & o & Wide & Any \\
+		\hline
+	\end{tabular}
+	\caption[Overview on All Defense Mechanisms]{TODO}
+    \todo{TODO}
+\end{table}

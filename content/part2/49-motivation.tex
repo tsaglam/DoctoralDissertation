@@ -1,0 +1,28 @@
+\section{Motivation}\label{sec:mde-motivation}
+
+% BACKGROUND
+Discouraging plagiarism in education is vital to uphold academic integrity, ensure fairness in evaluation, and teach students about ethical behavior in both academic and professional environments. Using plagiarism detection deters students from plagiarizing firsthand \cite{Braumoeller2001}.
+While automated plagiarism detection was proposed decades ago \cite{Ottenstein1976, prechelt2000, Novak2019}, most state-of-the-art plagiarism detectors can only be used with code~\cite{MOSS, prechelt2000, prechelt2002, Maertens2022, Novak2020}.
+
+However, computer science assignments and exams often include modeling assignments~\cite{Ciccozzi2018, Stahl2006, Saglam2023}, for example, \ac{UML} assignments regarding class, use case, sequence, and activity models.
+Furthermore, modeling assignments become more common with the increasing adoption~\cite{Brambilla2017, Hutchinson2011} of model-driven techniques. %, 
+Modeling is also taught in more traditional software engineering courses, as modeling languages like \ac{UML} are widely used in practice~\cite{Engels2006}.
+In \ac{MDE}, domain models are primary artifacts alongside code~\cite{Kent2002}.
+To further distinguish between program code and modeling artifacts, it is useful to consider that code typically adheres to executable instructions intended for machine interpretation, while modeling artifacts, which are often domain models, serve as higher-level abstractions aimed at expressing logic or domain-specific structures. While there are executable models~\cite{Seidewitz2014, Fuksa2024}, not all models have well-defined dynamic semantics~\cite{Stahl2006}.
+Modeling assignments are prone to plagiarism due to their complexity and their requirement of domain understanding and problem-solving skills~\cite{Martinez2020}.
+
+% GAP WE WANT TO FILE:
+Yet, there is very little research regarding modeling plagiarism detection~\cite{Saglam2022, Saglam2023}.
+%There are two plagiarism detection approaches specifically targeting modeling assignments~\cite{Martinez2020, Saglam2022}.
+\citet{Martinez2020} propose an approach for the modeling plagiarism detection based on \ac{LSH} which supports modeling artifacts that are based on the \ac{EMF}.
+However, this approach is prone to obfuscation attacks based on renaming and element insertion~\cite{Saglam2022}.
+Additionally, the approach cannot provide explainability~\cite{Karnalim2021} regarding the calculated similarities, as \ac{LSH}, in contrast to token-based approaches, does not employ subsequence matching but compares hash values. In practice, this means that pairs of suspicious models need to be manually inspected regarding their similarities.
+Furthermore, it is unclear how well the approach performs against the rising threat of AI-based plagiarism.
+
+While there is research on model differencing and model clone detection, these techniques alone are insufficient for plagiarism detection, as they are not resilient against obfuscation attempts~\cite{Wittler2023, Saglam2022, Martinez2020}.
+This is not surprising, as both techniques are not intended for an attacker-defender scenario, e.g., where an attacker purposefully attempts to obfuscate modeling clones or prevent model differencing from correctly deriving the differences between models.
+%
+As a conclusion, we identify the need for effective plagiarism detection approaches for modeling artifacts that are mature enough for practical application\footnote{There is significant interest in this topic among educators in the model-driven community, especially with the recent rise of generative AI. This interest led to my invitation to deliver the keynote at the \textit{Educators Symposium} of the 2024 \textit{MODELS} conference~\cite{models2024_preface}.}.
+
+\todo{Keynote slides mit DOI veröffentlichen und dann hier in Footnote zitieren}
+% ------------------

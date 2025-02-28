@@ -1,0 +1,35 @@
+\begin{table}
+\centering
+\small
+\begin{tabular}{lrrrrrrrr}
+  \toprule
+ds & Variant & Pairs & $p$ & $W$ & $\delta$ & $\delta\,Int.$ & $\delta$ 95\% CI & n \\ 
+  \midrule
+    \multirow{3}{*}{\rotatebox[origin=c]{90}{Pp.-19}} & TSN & OP & 8.3e-05 & 13,137 & 0.005 & Negligible & [-0.08, 0.09] & 351 \\ 
+   & SMM & OP & < 1e-10 & 6,441 & 0.178 & Small & [0.09, 0.26] & 351 \\ 
+   & Both & OP & < 1e-10 & 26,133 & 0.185 & Small & [0.10, 0.27] & 351 \\ 
+   \hline
+  \multirow{3}{*}{\rotatebox[origin=c]{90}{Pp.-56}} & TSN & OP & 0.25 & 3,580 & -0.034 & Negligible & [-0.11, 0.04] & 378 \\ 
+   & SMM & OP & < 1e-10 & 4,753 & 0.154 & Small & [0.08, 0.23] & 378 \\ 
+   & Both & OP & < 1e-10 & 14,018 & 0.148 & Negligible & [0.07, 0.22] & 378 \\ 
+  \hline
+   \multirow{3}{*}{\rotatebox[origin=c]{90}{TTT}} & TSN & OP & < 1e-10 & 1,256,914,634 & 0.009 & Negligible & [0.01, 0.01] & 188,805 \\ 
+   & SMM & OP & < 1e-10 & 3,346,969,836 & 0.177 & Small & [0.17, 0.18] & 188,805 \\ 
+   & Both & OP & < 1e-10 & 6,099,071,135 & 0.186 & Small & [0.18, 0.19] & 188,805 \\ 
+   \hline
+  \multirow{3}{*}{\rotatebox[origin=c]{90}{BG}} & TSN & OP & < 1e-10 & 1,379,905,112 & 0.021 & Negligible & [0.01, 0.03] & 67,161 \\ 
+   & SMM & OP & < 1e-10 & 1,637,665,065 & 0.104 & Negligible & [0.10, 0.11] & 67,161 \\ 
+   & Both & OP & < 1e-10 & 2,069,412,722 & 0.124 & Negligible & [0.12, 0.13] & 67,161 \\ 
+   \hline
+  \multirow{3}{*}{\rotatebox[origin=c]{90}{Hw.-1}} & TSN & OP & 1 & 378,825 & -0.069 & Negligible & [-0.11, -0.03] & 1,711 \\ 
+   & SMM & OP & < 1e-10 & 557,040 & 0.161 & Small & [0.12, 0.20] & 1,711 \\ 
+   & Both & OP & < 1e-10 & 656,971 & 0.106 & Negligible & [0.07, 0.14] & 1,711 \\ 
+   \hline
+  \multirow{3}{*}{\rotatebox[origin=c]{90}{Hw.-5}} & TSN & OP & 0.58 & 2,229 & -0.058 & Negligible & [-0.19, 0.07] & 153 \\ 
+   & SMM & OP & 3.9e-10 & 1,275 & 0.111 & Negligible & [-0.02, 0.24] & 153 \\ 
+   & Both & OP & 0.015 & 3,153 & 0.062 & Negligible & [-0.07, 0.19] & 153 \\ 
+   \bottomrule
+\end{tabular}
+\caption[Statistical Tests: Unrelated Pairs]{One-sided Wilcoxon signed-rank test results for \textbf{unrelated, student-made programs} regarding the potential adverse effects of our defense mechanisms compared to the baseline (sig. level of $\alpha=0.01$, alternative hypothesis $H1=greater$, test statistic $W$, effect size via Cliff's delta $\delta$, its interpretation $\delta\,Int.$, its 95 percent confidence interval $CI$, and the sample size $n$). Note that for original pairs (OP), high $p$ and low $\delta$ are desirable, as original pairs should \textit{not} be $greater$.} 
+\label{tab:to-base-original}
+\end{table}

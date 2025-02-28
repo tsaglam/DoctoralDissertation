@@ -1,0 +1,59 @@
+
+%\citet{Babur2019}:
+%\begin{description}[style=unboxed,leftmargin=5pt]
+%    \item[Type-A] Exact duplicates except for layout, formatting, internal ids, and cosmetic name changes (lower-/uppercase)
+%    \item[Type-B] Duplicates with smaller syntactic/semantic changes to names, types, attributes, and minor additions/removals.
+%    \item[Type-C] Duplicate larger changes/additions/removals of elements, names, types, and attributes.
+%    \item[Type-D] Semantically duplicates with different structures and content.
+%\end{description}
+
+%\citet{Faidhi1987,Karnalim2016}:
+%\begin{description}[style=unboxed,leftmargin=5pt]
+%    \item[Level 0:] Verbatim copy.
+%    \item[Level 1:] Changes in comments and indentation.
+%    \item[Level 2:] Changes in names.
+%    \item[Level 2.5:] Changes to packages and package namespaces (introduced by \cite{Karnalim2016}).
+%    \item[Level 3:] Changes in declarations (e.g., adding extra constants, changing the positions of declared variables, shuffling the methods, etc.).
+%    \item[Level 4:] Changes in pro wordgram modules (e.g., encapsulating statements in methods, using either parameters or global variables, inserting dummy methods).
+%    \item[Level 5:] Changes in program statements (e.g., using FOR instead of WHILE, etc.).
+%    \item[Level 6:] Changes in the decision logic (e.g., changes in expressions, loops to recursion, rearranging loosely coupled statements).
+%\end{description}
+
+\begin{table*}[t]
+	\centering
+    \small
+	\begin{tabular}{l p{215pt} r r r} % nach letztem c @{\hskip 2em}
+		\toprule
+		Techniques         & Description                                                                       & \footnotesize\#Occ. & \footnotesize\#Part. & \footnotesize Type\\
+		\midrule
+		Cosmetic Renaming  & Changing capitalization of names, introducing or resolving typographical errors.                 & 1    & 1    & A                     \\
+		Minor Renaming     & Introducing or resolving abbreviations, adding and removing suffixes or prefixes. & 85   & 9    & B                     \\
+		Major Renaming     & Changing names to synonyms, translations, or entirely different names.            & 141  & 7    & C                     \\
+		\midrule
+		Reorder Features  & Re-ordering attributes and references of a classifier.                            & 10   & 1    & B                     \\
+		Reorder Package   & Re-ordering the model elements contained within a single package.                       & 57   & 4    & B                     \\
+		Reorder Classifiers & Moving classifiers from one package to another (re-ordering across the model).  & 1    & 1    & C                     \\
+		\midrule
+		Introduce Package  & Create a package and add existing elements from other packages or other packages. & 20   & 3    & C                     \\
+		Dissolve Package   & Deleting a package and moving its contained elements to other packages.           & 8    & 4    & C                     \\
+		\midrule
+		Delete Feature     & Delete an existing attribute, relation, or operation of a classifier.             & 26   & 7    & B                     \\
+		Delete Classifier  & Delete an existing classifier from the model.                                     & 11   & 6    & C                     \\
+		Delete Package     & Delete an existing package from the model (can be part of dissolving a package).  & 5    & 4    & B                     \\
+		\midrule
+        Insert Feature     & Insert a new attribute, relation, or operation into a classifier.                 & 6    & 4    & B                     \\
+		Insert Classifier  & Insert a new classifier into the model.                                           & 10   & 3    & C                     \\
+		Insert Package     & Inserting a new package into the model (may be combined with moving elements).    & 5    & 4    & B                     \\
+		\midrule
+        Change Property    & Changing an element's property, e.g., \textit{abstract} for classifiers, \textit{ordered} or the cardinality for references. & 31    & 3    & B                     \\
+		\midrule
+		Remove Inheritance & Remove inheritance relation between the two classifiers.                          & 4    & 1    & C                     \\
+        Add Inheritance    & Add inheritance relation between the two classifiers.                             & 7    & 2    & C                     \\
+		Change Inheritance & Changing the inheritance hierarchy structurally without changing it semantically. & 9    & 2    & D                     \\
+		\bottomrule
+	\end{tabular}
+    \caption[Obfuscation Techniques by Novice Modelers]{Overview of the obfuscation techniques employed by the participants, classified according to \citet{Babur2019}. We include how often each technique occurred across all participants (denoted as \textit{\#Occ}) and how many participants employed it (denoted as \textit{\#Part}).}
+	\label{tab:student-obfuscation}
+%\todo{Do we want the midrules? And if yes how to we want to separate? e.g. for property?}
+\end{table*}
+

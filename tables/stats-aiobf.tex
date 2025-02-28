@@ -1,0 +1,31 @@
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lrrrrrrrr}
+  \toprule
+Dataset & Variant & Pairs & $p$ & $W$ & $\delta$ & $\delta\,Int.$ & $\delta$ 95\% CI & n \\ 
+  \midrule 
+   \multirow{3}{*}{{PROGpedia-19}} & TSN & P2S & 0.0027 & 893 & 0.019 & Negligible & [-0.17, 0.20] & 74 \\ 
+   & SMM & P2S & < 1e-10 & 1,485 & 0.210 & Small & [0.02, 0.38] & 74 \\ 
+   & Both & P2S & < 1e-10 & 2,216 & 0.209 & Small & [0.02, 0.38] & 74 \\ 
+      \hline 
+   \multirow{3}{*}{{PROGpedia-56}} & TSN & P2S & 0.025 & 971 & 0.077 & Negligible & [-0.11, 0.26] & 75 \\ 
+   & SMM & P2S & < 1e-10 & 1,540 & 0.371 & Medium & [0.19, 0.53] & 75 \\ 
+   & Both & P2S & < 1e-10 & 2,136 & 0.360 & Medium & [0.18, 0.52] & 75 \\ 
+      \hline
+   \multirow{3}{*}{{TicTacToe}} & TSN & P2S & 5.2e-08 & 1,107 & 0.042 & Negligible & [-0.14, 0.22] & 75 \\ 
+   & SMM & P2S & < 1e-10 & 1,770 & 0.194 & Small & [0.01, 0.37] & 75 \\ 
+   & Both & P2S & < 1e-10 & 2,342 & 0.210 & Small & [0.03, 0.38] & 75 \\ 
+      \hline
+   \multirow{3}{*}{{Homework-1}} & TSN & P2S & 0.89 & 913 & -0.046 & Negligible & [-0.23, 0.14] & 74 \\ 
+   & SMM & P2S & 2e-06 & 406 & 0.075 & Negligible & [-0.11, 0.26] & 74 \\ 
+   & Both & P2S & 0.003 & 1,536 & 0.024 & Negligible & [-0.16, 0.21] & 74 \\ 
+      \hline
+   \multirow{3}{*}{{Homework-5}}& TSN & P2S & 1 & 229 & -0.115 & Negligible & [-0.29, 0.07] & 75 \\ 
+   & SMM & P2S & 2.7e-09 & 1,035 & 0.153 & Small & [-0.03, 0.33] & 75 \\ 
+   & Both & P2S & 0.11 & 1,260 & 0.047 & Negligible & [-0.14, 0.23] & 75 \\ 
+   \bottomrule
+\end{tabular}
+\caption[Statistical Tests: AI-based Obfuscation]{One-sided Wilcoxon signed-rank test results for \textbf{AI-based obfuscation} regarding the improvement by of our defense mechanism compared to baseline (sig. level of $\alpha=0.01$, alternative hypothesis $H1=greater$, test statistic $W$, effect size via Cliff's delta $\delta$, its interpretation $\delta\,Int.$, its 95 percent confidence interval $CI$, and the sample size $n$). For plagiarism-to-source pairs (P2S), low $p$ and high $\delta$ are desirable.} 
+\label{tab:to-base-gpt-obf}
+\end{table}

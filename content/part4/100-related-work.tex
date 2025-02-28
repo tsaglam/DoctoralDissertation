@@ -1,0 +1,316 @@
+\chapter{Related Work}\label{cha:related-work}
+In this chapter, we review research from multiple areas that intersect with the contributions of this dissertation.
+We begin by discussing software plagiarism detection systems widely used in educational settings.
+Second, we turn to research on clone detection, a problem that, while distinct from plagiarism detection, shares similarities in identifying structural similarities across codebases.
+Third, we explore related work on obfuscation attacks and mitigation techniques related to our defense mechanisms.
+Fourth, we address modeling plagiarism research in model-driven engineering, including model clone detection and model differencing.
+Next, we discuss the similarities between plagiarism detection and automated assessment in computer science education.
+Finally, we examine genome sequencing algorithms, a field whose techniques relate to one of our defense mechanisms.
+
+% --------------------------------------------------------------------------------------------
+\section{Software Plagiarism Detection Systems}
+Plagiarism detection systems, often also referred to as plagiarism detectors, enable educators to tackle the problem of plagiarism at scale by helping to seek out plagiarism and deter it in the first place~\cite{Braumoeller2001}. 
+Despite the early roots of software plagiarism and similarity research~\cite{Ottenstein1976}, \citet{Novak2019} observe that it is still an ongoing field of research, and the number of observed research studies has grown in recent years.
+%
+Most software plagiarism detection approaches compare the structure of the code~\cite{Nichols2019, Novak2019}; among them, token-based approaches are the most popular tools employed in practice.
+\citet{Novak2019} criticize that despite the increased number of proposed tools and approaches in recent years, most remain inaccessible to the public, being used, if at all, exclusively by their creators and mentioned in only one article. They also note that many of these tools do not compare their work to others, raising concerns about their quality.
+
+JPlag~\cite{prechelt2000} and MOSS~\cite{MOSS} are the most widely used tools \cite{Aniceto2021, Novak2019}.
+Furthermore, JPlag is most frequently referenced and compared to \cite{Novak2019}. This is unsurprising, as JPlag is open source compared to MOSS and can be deployed locally. MOSS is a closed source; all student data must be sent to the MOSS server located in the United States. Thus, MOSS is not compatible with the \ac{GDPR} of the European Union. Finally, recently, MOSS enforced a strict rate limit of 100 submitted programs per day, which is insufficient for large courses.
+Other tools mentioned frequently are Plaggie~\cite{Plaggie}, Sherlock~\cite{Joy1999}, and SIM~\cite{SIM}. However, they are partially outdated or no longer maintained.
+One noteworthy modern tool is Dolos~\cite{Maertens2022}, which has been recently developed and conceptually borrows heavily from MOSS and JPlag.
+Just like JPlag, it offers a modern user interface.
+However, it is currently limited as it only supports single files and has limited language support.
+All mentioned approaches are token-based and find matching fragments via hashing and tiling~\cite{prechelt2002, MOSS}. Specifically, JPlag~\cite{prechelt2000, prechelt2002} and Sherlock~\cite{Joy1999} use \textit{greedy string tiling} (with running Rabin-Karp matching as performance optimization)~\cite{Wise1993, Wise1995}, whereas MOSS and Dolos~\cite{Maertens2022} employ \textit{winnowing}~\cite{Schleimer2003}.
+
+There are substantial differences between plagiarism detection systems for natural language and source code~\cite{Fincher2019, Simon2013, Simon2014b} as different techniques apply~\cite{Lancaster2005}. One key difference is that there are well-defined formal grammars for programming languages, and thus, the space of possible valid input programs is both more restricted and less ambiguous.
+Thus, our work does \textit{not} relate to plagiarism detection for natural languages, written text, or similar textual artifacts. While many token-based software plagiarism detectors like JPlag have rudimentary support for (natural language) text, it is not recommended to rely on that as the current state-of-the-art in natural language processing employs completely different techniques like transformer-based models, which excel at capturing nuanced semantic relationships and meaning in the text~\cite{khurana2023, min2023}. These models go beyond simple token matching by understanding context and synonyms. This allows for the identification of paraphrasing and complex rewording~\cite{foltynek2019, manzoor2023}.
+
+As our defense mechanisms are designed to extend state-of-the-art approaches and our modeling plagiarism detection approach applies token-based techniques for modeling artifacts, we consider token-based software plagiarism detection systems as the foundation for our work (see \autoref{sec:SPD}). Thus, we do not compare the different detection systems above in detail.
+Our research, however, applies to any token-based software plagiarism detection system. We implement and evaluate our contributions with JPlag\footnote{Note that while it was developed at Karlsruhe Institute of Technology (KIT), it is also, based on the aforementioned factors, an ideal fit for our research contributions.} (see \autoref{sec:baselines}).
+
+% --------------------------------------------------------------------------------------------
+\section{Software Clone Detection}\label{sec:rw-clone-detection}
+Reusing source code via copying is common in software development. This may involve minor adaptation, but a code fragment may evolve even if directly copied. Consequently, software systems often contain similar fragments called code clones~\cite{Roy2009}.
+\citet{juergens2009} confirm that such code clones significantly impede modern software development.
+Clone detection, denoting identifying such code bases, has been extensively researched \cite{Shobha2021review, ain2019, rattan2013, Roy2009}.
+While both clone detection and plagiarism detection are software similarity problems~\cite{Novak2019}, they ultimately differ in many aspects~\cite{mariani2012}.
+Clone detection usually seeks similar fragments in a single program, which is why plagiarism detection compares sets of programs.
+Moreover, code clones are created accidentally~\cite{juergens2009}, while plagiarism is a deliberate act.
+
+\citet{Hammad2022} present \textit{Clone-Seeker}, a tool designed for code clone search that leverages clone class metadata to improve the retrieval of syntactically and semantically similar code fragments. The metadata includes processed identifiers and a list of keywords capturing the semantics of the clone. This metadata allows developers to search for clones using queries.
+
+\citet{wang2018} seek to specifically detect what they call \emph{large-gap} clones, meaning clones with big differences. Their tool \textit{CCAligner} tokenizes source code and finds fuzzy matches through a novel \emph{e-mismatch index}. Like many software plagiarism detectors, this approach is token-based. 
+Thus, CCAligner works similarly to JPlag, though JPlag only considers exact matches. Of course, the main difference is that CCAligner aims to detect clones, whereas JPlag aims to detect plagiarism cases.
+
+\citet{white2016} propose a deep learning approach for code clone detection by integrating both lexical and syntactic information. Their tool utilizes recurrent and recursive neural networks to learn representations for code fragments directly from software repositories, bypassing handcrafted features common in traditional methods. The approach captures similarities in a feature space that considers structural patterns and contextual usage by mapping terms to continuous vector spaces and employing a recursive structure over abstract syntax trees.
+Like software plagiarism detectors, structural information is extracted from program syntax trees; the approach is ultimately based on deep learning. One disadvantage is, thus, that explainability and line-based traceability are limited, which is essential for plagiarism detection (see \autoref{sec:tsn-requirements}).
+
+\citet{ly2017} aims to enhance clone detection through source code normalization using program dependence graphs. With this, they aim to find code clones altered more reliably via renaming, reordering, or statement insertion.
+Their approach shares similarities with our token sequence normalization defense mechanism, as both use program dependence graphs for normalization. However, their approach normalizes source code, while ours normalizes token sequences. They consider code clones, and we consider plagiarism. Finally, our approach is language-agnostic.
+
+\citet{li2024} present \textit{Prism}, a clone detection tool that uses behavior semantics extracted from assembly code to identify semantic clones. Prism generates representations by combining multiple instruction set architectures, specifically CISC and RISC, to capture nuanced memory and computational behaviors.
+%
+Compared to token-based plagiarism detectors, which focus on exact token matching and structural similarity, the reliance on assembly-level semantics provides resilience against structural variations. However, its dependence on specific instruction set architecture features might limit its robustness to obfuscation techniques that heavily alter assembly patterns. Furthermore, the approach is limited to specific languages because it relies on assembly code.
+
+\citet{xu2024} introduce \textit{DSFM}, a functional clone detection tool that enhances detection by leveraging interactions between subtrees within abstract syntax trees. DSFM uses a recursive and recurrent network to encode subtrees, capturing both structural and semantic information, and applies a factorization machine to assess similarities at both program and block levels.
+%
+Unlike structure-based plagiarism detectors, it is designed to detect functional clones, meaning code snippets that perform similar functionality.
+
+\citet{Dou2024} introduce \textit{CC2Vec}, a clone detection tool that combines token categorization with contrastive learning to enhance code clone detection, especially for semantic clones. CC2Vec encodes tokens into types and uses self-attention layers to produce vector representations, facilitating both syntactic and semantic detection. By applying contrastive learning, CC2Vec minimizes the effects of structural variations.
+%
+The complexity of setup and the need for specialized training make this approach less practical for straightforward plagiarism detection tasks.
+Moreover, reliance on token categorization makes CC2Vec vulnerable to obfuscation techniques like variable renaming or structural changes, which can disrupt its token patterns. Unlike software plagiarism detectors, CC2Vec's complexity limits its adaptability against obfuscation.
+
+
+Despite the similarities, however, plagiarism detection is a different field~\cite{mariani2012}, and clone detectors are insufficient for plagiarism detection.
+In plagiarism detection, the goal is to accurately quantify the likelihood of code being plagiarized despite potential obfuscation attacks by an adversary.
+In contrast, code clone detection does not consider scenarios where an adversary attempts to affect the process as code clones typically arise inadvertently~\cite{juergens2009}. As a consequence, clone detectors are vulnerable to obfuscation attacks.
+Plagiarism detection approaches must deal with an additional layer of complexity introduced by the adversary-defender-scenario~\cite{Saglam2024b}.
+Targeted obfuscation attacks thus make software plagiarism detection more challenging than clone detection~\cite{mariani2012}
+Still, many clone detection approaches share similarities in their employed techniques~\cite{wang2018, ly2017, Dou2024, white2016}.
+However, clone detection approaches currently seem to lean on machine learning techniques~\cite{feng2024}.
+
+% --------------------------------------------------------------------------------------------
+\section{Obfuscation Attacks and Their Mitigation}
+Obfuscation attacks present a significant challenge for software plagiarism detection by obscuring similarities between plagiarized and original programs. While obfuscation has long been a concern~\cite {zhang2014b, Karnalim2016, Novak2019}, research on defending existing state-of-the-art plagiarism detection tools from obfuscation is limited. Most recent studies focus on developing entirely new approaches that often remain inaccessible to the public, as noted by \citet{Novak2019}. Research on mitigating obfuscation usually focuses on manual obfuscation and specific obfuscation types.
+As automated obfuscation attacks are only discussed recently, research in that direction is even more sparse.
+Among the few notable exceptions are the works of \citet{DevoreMcDonald2020}, \citet{Biderman2022} and \citet{zhang2014b}.
+
+\citet{DevoreMcDonald2020} present \mossad, a tool that automatically generates undetectable plagiarized code variants, effectively defeating detectors like Moss and JPlag. By employing program transformation techniques inspired by genetic programming, \mossad generates multiple variants of a source code file that are semantically equivalent but evade detection (see \autoref{sec:foundations-mossad}). The non-deterministic nature of \mossad allows it to create diverse code variants that appear no more suspicious than authentic student submissions.
+
+\citet{Biderman2022} examine how language models like \textit{GPT-J} can generate code that evades detection by Moss, a widely-used software plagiarism detection tool. Their study reveals that GPT-J can reliably produce correct, syntactically diverse solutions to introductory programming problems with minimal human intervention, avoiding Moss's similarity thresholds. This capability raises concerns for academic integrity as AI tools become increasingly accessible. Although Moss flags some fundamental transformations, it is ineffective against AI-generated code, which introduces unique structural patterns undetectable by current plagiarism methods.
+
+\citet{Foltynek2020} address the challenge of detecting machine-obfuscated plagiarism, explicitly focusing on text rewritten by online paraphrasing tools. Their approach evaluates various word embedding models combined with classifiers, thus distinguishing human-written from machine-paraphrased text.
+%
+While this is one of the few works focusing on \textit{automated} obfuscation, it covers plagiarism of natural language, not source code. Thus, it is not applicable to the challenges we discuss in this dissertation. Our contributions only consider software plagiarism.
+
+% --------------------------------------------------------------------------------------------
+\subsection{Resilience via Code Normalization}
+%Code normalization is also utilized in various other research areas.
+Code normalization simplifies code by reducing syntactic variability, making it easier to identify bugs, enforce coding standards, and detect duplicates. It is used in areas like bug detection, automated code review, clone detection, and machine learning on source code.
+%
+While the previously discussed research of clone detection approach of \citet{ly2017} comes closest to our defense mechanism of token sequence normalization (see \autoref{sec:rw-clone-detection}), code normalization is used in many research areas.
+
+%While Ly's normalization comes closest to our approach, normalization is a standard pattern in code comparison. 
+In general, we can distinguish between two types of normalization: \emph{lexical normalization} and \emph{structural normalization}.
+%
+\emph{Lexical normalization} provides invariance to lexical modifications. Program semantics need not be considered. \citet{roy2008} employ lexical normalization to detect code clones, specifically aiming to disregard superficial editing differences to allow textual line-by-line code comparison. They introduce a parser-based, lightweight approach called \textit{NICAD} that leverages a source transformation system to detect near-miss clones by simplifying and normalizing C code accurately. %; they rename all identifiers to @id@, for example.
+\citet{allyson2019} seek to improve a text-based plagiarism detector. They do this with several preprocessing techniques, such as removing whitespace.
+The tokenization step of token-based detectors abstracts from specific details like whitespace, names, and types; it is a form of lexical normalization. Thus, our defense mechanism does not need to consider lexical modifications as immunity to them is inherently given, markedly differentiating it from the works above.
+
+Our defense mechanism token sequence normalization is a form of \emph{structural normalization}. This type of normalization makes code comparisons invariant to structural modifications. Program semantics must be considered here, making structural normalization more complex than lexical normalization. It may be more accurate to view structural normalization as a type of program analysis rather than code normalization, as code in its textual form is usually not directly considered. Instead, programs are parsed and then further processed or analyzed.
+
+\citet{wang2008} use structural normalization to simplify program analysis by bringing code into a consistent form. They use the system dependence graph, a generalization of the PDG. 
+%
+They construct the graph directly from the source code and consider it the result of the normalization.
+This presents the first difference to token sequence normalization. Another difference is, once again, that we do not construct our graph directly from the source code. In contrast to their approach, we specifically focus on identifying instances of plagiarism.
+
+\citet{Schott2024} present \textit{jNorm}, which performs bytecode normalization to facilitate code similarity detection across Java applications compiled with different environments. By transforming Java bytecode into a stable intermediate form, jNorm addresses differences caused by varying compilers, Java versions, and target levels, which often obscure similarity analysis.
+%
+Their approach can align bytecode for consistent comparison in plagiarism detection. However, unlike general plagiarism detectors, jNorm is specifically tailored to the Java program.
+
+Besides detecting plagiarism and clones, program comparison is also used to detect malware. Like plagiarism detection in a business context, malware detection must work with bytecode, as source code is usually unavailable. \citet{bruschi2007} use structural normalization for malware detection. They consider their normalization a form of optimization. They apply several normalizing transformations to programs, such as dead code removal. From the resulting normalized programs, they construct graphs. Like previously mentioned approaches, they compare graphs directly, which serves to differentiate token sequence normalization. Once more, token sequence normalization is also different because we do not work with bytecode.
+
+In summary, our work distinguishes itself from previously mentioned normalization approaches by being language-agnostic and specifically addressing obfuscation techniques used to disguise plagiarism.
+
+% --------------------------------------------------------------------------------------------
+\subsection{Resilience via Graphs}
+There are some graph-based approaches to plagiarism detection~\cite{Novak2019}, for example, based on program dependence graphs~\cite{ferrante1987}. While graph-based approaches may be potentially less vulnerable to some obfuscation attacks, they are not feasible in practice~\cite{liu2006} due to the NP nature of subgraph isomorphism~\cite{Shang2008, McCreesh2020, Lubiw1981}.
+
+Graph-based approaches, such as \textit{GPlag} by \citet{liu2006}, compare graphs directly instead of linearizing the program. Thus, they use a more detailed program representation. This can be leveraged to achieve resilience against \textit{some} obfuscation attacks like dead code insertion.
+Determining subgraph isomorphism NP-complete and doing so pairwise for many programs does not scale well and makes these approaches impractical.
+
+Program behavior is resilient to semantic-preserving obfuscation attacks and, thus, can also be used for plagiarism detection.
+\citet{cheers2021} present the plagiarism detector BPlag. It uses symbolic execution to extract behavior from source code and calculates a similarity score by comparing graphs representing the extracted behavior.
+As symbolic execution and graph comparisons are both computationally expensive, the runtime of BPlag is too high for practical use, much like GPlag. Along with their implementation of BPlag, the authors provide a notice acknowledging this: "\textit{BPlag is computationally complex, requires lots of RAM and disk space, and does not scale to large data set sizes. It should not be used on conventional computers - HPC workstations only.}"~\cite{bplag-github}
+
+\citet{chae2013} aim to detect plagiarism on a bytecode level by comparing the sequence and frequency of API calls. They do so with a novel graph called API-labeled control flow graph (A-CFG), which captures both the sequence and frequency of API calls to reflect the functionality of a program. They then apply a random walk with restart (RWR) to compute a score vector for each graph, allowing scalable similarity comparisons through vector cosine similarity rather than direct, costly graph matching.
+%
+Our defense mechanism token sequence normalization similarly builds a graph representation and reduces it for efficient comparison; however, while they focus on bytecode and API call patterns, our work applies to any programming language and focuses on structural similarity. Approaches based on vector similarity do not provide sufficient traceability and explainability (see \autoref{sec:tsn-requirements}).
+
+
+\citet{zhang2014} propose \emph{LoPD}, a plagiarism detection system that shifts focus from detecting similarities to identifying dissimilarities in program behavior. LoPD uses symbolic execution and weakest precondition reasoning to analyze computation paths, aiming to find inputs that lead two programs to produce different outputs or execute semantically different paths. If LoPD finds any such dissimilarity, the programs are deemed distinct; otherwise, it suggests potential plagiarism. This method enhances resilience against obfuscation techniques, basing its comparison on formal program semantics.
+However, its reliance on symbolic execution and constraint solving means LoPD can be computationally intensive and less effective for small programs with simple logic, as these may produce false positives due to coincidental path alignment. Moreover, their approach is limited to C and C++ programs.
+
+These graph-based approaches thus relate to our defense mechanism token sequence normalization, which also leverages the advantages of graph-based approaches via program dependence graph. However, our defense mechanism operates on a token level rather than a source code level. This means we construct the program dependence graph based on tokens, and the approach is thus language agnostic. Finally, via token sequence normalization, we normalize the internal representation of each input program, but we do not conduct a graph-based comparison. Thus, we preserve the scalability of token-based approaches and combine the best of both worlds.
+
+% --------------------------------------------------------------------------------------------
+\subsection{Resilience via Intermediate Representation}
+\citet{DevoreMcDonald2020} propose using semantic checking of intermediate representation (assembly and Java byte code) to defend against \mossad, their automated, threshold-based, insertion-based obfuscation attack. However, this language-dependent defense mechanism is conceptual and is yet to be realized.
+We also explored this idea by using the LLVM-IR code for plagiarism detection \cite{Heneka2023}. The usability and platform dependence of LLVM limits this approach.
+
+\citet{Karnalim2016} propose a bytecode-based approach for detecting source code plagiarism in introductory Java programming assignments. Unlike source code approaches that rely on language-specific features, this approach operates on Java bytecode, which remains stable and removes syntactic sugar. Essential techniques include instruction generalization, reinterpretation, and method linearization to handle common plagiarism tactics. Thus, the approach is resilient to superficial code modifications often seen in student assignments.
+This approach, however, is Java-specific and thus does not support non-JVM languages. Furthermore, it requires the program to compile into byte code. Finally, their predefined criteria limit the proposed preprocessing strategies; adversaries may bypass detection via obfuscation attacks that fall outside the filtered scope.
+%
+In contrast, our defense mechanisms are language-independent or language-agnostic and less limited in relating to programming correctness. In fact, subsequence match merging works even for syntactically incorrect programs as long as the detector can create tokens for them.
+
+\citet{Luo2017} present \textit{CoP}, a binary code similarity comparison tool that is resilient to code obfuscation. CoP uses symbolic execution and longest common subsequence (LCS) analysis on semantically equivalent basic blocks to identify similar code segments in binaries, regardless of transformations or compilation differences. By comparing symbolic representations at the basic block, path, and program levels, CoP achieves high robustness against obfuscation techniques, such as control flow flattening and dead code injection. Due to its restriction to binary code, their approach is limited to C and C++ programs.
+Furthermore, their approach is resource intensity due to symbolic execution and LCS-based analysis, which makes it computationally expensive and less practical for large codebases.
+
+In summary, approaches based on intermediate representation, such as assembly or byte code, provide obfuscation resilience.
+However, these methods have several drawbacks, such as being language-dependent, requiring significant computational resources, and lacking traceability and explainability.
+However, they come with several limitations, like language dependence, high computational cost, and a lack of traceability and explainability. In contrast, our defense mechanisms do not suffer from these limitations and provide strong resilience.
+
+% --------------------------------------------------------------------------------------------
+\subsection{Resilience via Preprocessing}
+
+\citet{Novak2020} examines the challenge of detecting source-code plagiarism in academic settings, focusing on preprocessing techniques to enhance the accuracy of plagiarism detection tools.
+This involves, among other aspects, the resilience against obfuscation.
+One notable approach, common code deletion, involves removing frequently reused code elements from student submissions before entering the detection pipeline. They categorize certain code elements, such as template-based structures, as common code, as they do not contribute to detecting plagiarism meaningfully and may even serve as obfuscating insertions. 
+As an example, this involves getters, setters, and empty methods.
+By excluding such elements in advance, plagiarism detectors gain inherent resilience against specific types of semantic-preserving obfuscation attacks. However, this approach is limited to predefined common code types; an adversary could bypass it by inserting different, unrecognized elements, thus limiting the robustness of this defense.
+Moreover, they emphasize the need for calibration and comparative analysis across tools to understand how preprocessing techniques contribute to the effectiveness of plagiarism detection.
+
+Similarly, \citet{Karnalim2020} investigate the impact of various preprocessing techniques on the accuracy and efficiency of source code similarity detection in introductory programming courses. They examine 16 preprocessing techniques, such as comment and identifier removal, syntax tree linearization, and renaming, assessing how each affects similarity comparison. Their findings suggest that steps like identifier removal improve both efficiency and effectiveness, while others, like syntax tree linearization, enhance accuracy at the expense of speed. These insights are valuable for designing detection tools and helping educators understand potential disguises students might apply to copied code.
+While these preprocessing techniques are effective, they cannot provide broad obfuscation resilience.
+For example, these techniques do not address the threat of obfuscation based on statement insertion.
+
+\citet{cabre2014} studies how using code obfuscators like \textit{ARTIFICE} and \textit{ProGuard} affects different plagiarism and clone detection systems. Out of all tools, JPlag performs third best. They propose using deobfuscation tools, which improve the resilience of detection systems across the board. This defense mechanism, however, is very attack-specific. Furthermore, it is a preprocessing technique that must be done for each input program.
+
+% Final words:
+\noindent
+In contrast to all aforementioned approaches, our defense mechanisms are either language-independent or language-agnostic. Subsequence match merging is also attack-independent. Our defense mechanisms also operate on the abstract level of the matched subsequences, thus improving generalizability. In contrast to the mentioned approaches, our defense mechanisms provide broad resilience against automated obfuscation attacks.
+However, even more importantly, this ensures that our approaches do not modify the source code of the input programs. This is crucial, as gathering and presenting evidence must be possible for the original, unaltered programs (see \autoref{sec:tsn-requirements}).
+
+% --------------------------------------------------------------------------------------------
+\section{Plagiarism in Modeling Assignments}
+
+\noindent
+This section reviews research related to modeling plagiarism and its detection.
+Note that there are next to no other approaches for modeling plagiarism detection~\cite{Martinez2020}.
+We thus also discuss approaches from model clone detection and model differencing, which are unsuitable for plagiarism detection due to their vulnerability to obfuscation attacks~\cite{Saglam2022} and computational inefficiency for large courses~\cite{Martinez2020}.
+
+% --------------------------------------------------------------------------------------------
+\subsection{Modeling Plagiarism Detection}
+\citet{Martinez2020} utilize \emph{Locality Sensitive Hashing} (LSH), an approximate nearest neighbor search mechanism, to detect plagiarism. They embed models into a similarity metric space by transforming them into context-aware fragments that are turned into integer vectors using \textit{minhash} on the names of the fragment's classes, attributes, and operations.
+The model signatures are then computed using LSH, and the similarity of any two models is determined by the hamming distance between the two signatures. 
+Unlike ours, theirs combines contextual rather than structural information, rendering it vulnerable to obfuscation attacks.
+To our knowledge, the LSH-based performs well and is the only other approach for modeling plagiarism detection.
+
+However, it has some limitations.
+The LSH signatures are computed based on names, so their approach is prone to renaming-based obfuscation attacks.
+Furthermore, their approach is not resilient against attacks based on randomly inserting features like attributes and operations \cite{Saglam2022}.
+These are common obfuscation attack types~\cite{Saglam2023, Novak2019}.
+In contrast, our approach is resilient against these attacks.
+Moreover, their approach does not provide sufficient information on how similarities are calculated, hindering traceability and explainability and making manual inspection significantly harder. 
+In contrast, our approach provides detailed information on how the different elements contribute to the similarity score.
+
+\citet{cornic2008} presents a plagiarism detection tool for source code, however, built on the Eclipse Platform using a model-driven approach. This allows the tool to analyze source code from multiple programming languages by converting it into instances of a high-level language-independent metamodel consisting of statements, blocks, classes, functions, calls, and control structures. They generate Java code for each model instance via EMF, enabling the comparison across different languages.
+The tool involves multiple components: a generic front-end for model conversion, a back-end comparison engine, and a results display interface.
+%
+Besides the fact that this approach uses a generic metamodel for programming languages and model transformation to parse code and generate a Java representation, the approach compares programs similar to other token-based approaches via greedy string tiling~\cite{Wise1993}. Thus, this approach uses model-driven techniques for source code plagiarism detection but does not support modeling plagiarism detection. In contrast, our approach enables modeling plagiarism detection, thus allowing token-based plagiarism detectors to support both models and code.
+
+% --------------------------------------------------------------------------------------------
+\subsection{Model Clone Detection}
+
+\noindent
+Model clone detection~\cite{Shobha2021, Hammad2022} deals with finding syntactically or semantically identical model fragments in a larger model or across multiple models.
+While the employed techniques are similar to modeling plagiarism detection, modeling clone detectors are not designed to withstand the threat of obfuscation attacks. Thus, they are essentially different tasks.
+%
+For model clone detection, the extent of a modification should be reflected in the similarity measures for a given model fragment.
+In contrast, some changes should not reduce the similarity for plagiarism detection. This allows for resilience against obfuscation attacks.
+
+\citet{Deissenboeck2008} present a graph-based approach to detect clones in model-based development, specifically for large Simulink models used in automotive control systems. The method normalizes model structures, applies graph algorithms to find clone pairs, and clusters them for further analysis. Their approach shows the potential to improve maintenance by identifying reusable components and reducing redundant code in model-based systems.
+
+\citet{Stoerrle2013} address the challenge of detecting model clones in UML domain models, drawing parallels between clone issues in code-based and model-based development. They introduce a tool that applies various algorithms and heuristics to identify UML model clones, highlighting that existing techniques for code clone detection are not directly applicable to models due to unique structural and semantic differences. They discuss that each detection approach has limitations, indicating a need for further refinement.
+%
+Based on this work, \citet{Stoerrle2015} propose an improved clone detection approach for UML domain models. This approach is notable for its broad applicability across various UML model types and its ability to detect clones with high accuracy and speed. 
+
+\citet{Strueber2016} investigate clone detection in graph-based model transformation languages. They present a customized approach for identifying clones in transformation rules to detect structural patterns in graph-based languages. The study outlines specific requirements for clone detection in \ac{MDE} through use cases such as clone refactoring and performance improvement.
+
+\citet{Babur2019} present \textit{SAMOS}, a framework for detecting metamodel clones in large repositories, focusing on EMF metamodels. SAMOS uses natural language processing, vector space modeling, and clustering to detect similar model fragments. They evaluate SAMOS against tools like NICAD-Ecore and MACH, showing that SAMOS achieves high accuracy and scalability for clones across multiple datasets. While their approach performs well for clone detection, it is prone to obfuscation attacks based on renaming, retyping, and attribute value changes. Thus, it is not sufficient for metamodel plagiarism detection.
+
+% --------------------------------------------------------------------------------------------
+\subsection{Model Differencing}
+\noindent
+Model Differencing is extensively researched \cite{Kessentini2014, Stephan2013} and is commonly used for model versioning, which involves comparing different states of the same model.
+Various model differencing approaches exist~\cite{Kolovos2009, Zadahmad2019, Maoz2011}.
+They are loosely related to plagiarism detection systems, as both determine model similarity.
+Nevertheless, model differencing approaches are not designed for a scenario where an adversary intentionally obfuscates similarity. Thus, they are vulnerable to fundamental obfuscation attacks.
+
+One of the early approaches is \emph{UMLDiff}~\cite{Xing2005}, which provides model differencing based on custom similarity metrics. Since these metrics are specifically designed and optimized for UML models, their application is limited to the UML domain.
+\emph{DSMDiff} proposed a similar approach which rather supports arbitrary metamodels \cite{lin2007}.
+%
+Metamodel-agnostic model differencing suffers from reduced accuracy due to the task's inherent complexity, which has been shown for EMF Compare and DSMDiff by \citet{Kolovos2009}. \citet{Pietsch2013} present a set of model evolution scenarios that often pose problems for model differencing approaches.
+
+The most widely used metamodel-independent approach and thus the de-facto standard is \emph{EMF Compare}~\cite{Brun2008}.
+It uses similarity metrics for model matching and provides a high degree of customizability, thus allowing the design of custom matching strategies. As EMF Compare itself is model-driven, the derived changes are represented by a metamodel, enabling further use of model transformations.
+EMF Compare's identifier-based strategy fails to detect plagiarism, as changing identifiers is an easy obfuscation attack.
+%
+Furthermore, its similarity-based strategy is susceptible to renaming and reordering-based attacks.
+We demonstrated this in a different context~\cite{Wittler2023}, yet the same principles hold true for obfuscation attacks.
+Since EMF Compare allows custom strategies, our approach for modeling plagiarism detection could be implemented as such a strategy in order to use the visualization EMF Compare provides. However, we could also employ related approaches for change visualization~\cite{Brand2010, Brand2010b}.
+
+In contrast to the syntactic approaches like EMF Compare, which compares the concrete or abstract syntax of models, semantic model differencing compares models in terms of their meaning by leveraging semantic matching \cite{Maoz2011, Maoz2016}. Multiple approaches for semantic model differencing have been proposed \cite{Langer2014, addazi2016}.
+\citet{Maoz2016} provide a framework to relate syntactic and semantic model differences.
+However, just as syntactic approaches, they are not intended for plagiarism detection and thus offer no resilience to obfuscation attempts.
+
+% --------------------------------------------------------------------------------------------
+\subsection{Image Plagiarism Detection}
+Our work primarily focuses on modeling artifacts in the MDE domain. This involves specifically domain models and their digital artifacts and does not include images or image-based diagrams.
+We thus only loosely relate image-based plagiarism detection, which focuses on identifying similarities in visual content such as images or diagrams~\cite{Ovhal2015, hurtik2015, meuschke2018}. In contrast, modeling plagiarism detection involves comparing structured data representations, like UML models, requiring specialized techniques assessing the semantic and structural similarity between model elements rather than visual features.
+Moreover, like natural language processing, state-of-the-art image recognition uses completely different techniques~\cite{li2022, Shafiq2022}.
+
+\citet{umam2021} evaluate the effectiveness of the Perceptual Hash algorithm in detecting similarity in UML sequence diagram images, even when subjected to rotations and skewing. Their findings indicate that these common disturbances do not significantly affect the ability of the algorithm to detect plagiarism, maintaining a similarity detection rate above 60 percent.
+
+\citet{dahanayake2021} propose an approach to detect plagiarism in enhanced entity-relationship (EER) diagram images using deep neural networks, image processing, OCR, and text similarity algorithms. This approach provides accurate, fast plagiarism detection, generating a similarity report to aid in examination marking and discourage academic misconduct in diagram-based assignments.
+
+\citet{skuruvila2017} present a flowchart plagiarism detection system based on image processing that compares shapes, orientation, and text by converting flowcharts into graphs. This graph-based approach detects plagiarism even with rearranged flowchart elements, demonstrating accuracy across different shapes and orientations.
+
+\citet{parmar2024} introduce \textit{VIBRANT-WALK}, an algorithm for detecting image plagiarism of figures in academic papers by comparing images to a repository of published content. The two-stage process uses a \textit{vibrancy matrix} for contour detection and a pixel-by-pixel comparison through random walks, achieving high accuracy on a custom dataset of research article images.
+
+All approaches mentioned above focus on image-based plagiarism detection. Furthermore, these approaches focus on a single type of diagram, for example, sequence diagrams or flowcharts. Thus, they are not applicable for modeling plagiarism detection.
+
+% --------------------------------------------------------------------------------------------
+\section{Automated Assessment in Computer Science Education}
+Plagiarism detection also relates to automated assessment in computer science~\cite{mala-mutka2005}, which refers to using software tools and systems to evaluate students' programs without requiring manual grading.
+Automated assessment is essential in programming courses because it provides immediate, consistent feedback and scales large courses, where the submitted solutions for one assignment can total hundreds of thousands of lines of code.
+Automated assessment for programming assignments is a widely researched field~\cite{Messer2024, paiva2022, higgins2005, mala-mutka2005}.
+%
+\citet{zschaler2018} explore the importance of modularity in automated assessment systems, especially in the context of scaling and flexibility in programming education.
+They introduce their \textit{NEXUS} platform, which allows for independent execution and scaling of components, enabling flexibility for educators to tailor grading processes.
+
+Our approach to modeling plagiarism detection is loosely related to automated assessment for modeling assignments, which educators recognize as a crucial requirement~\cite{Kienzle2024}. One example is the automated grading of UML models~\cite{Bian2019, Bian2020, Boubekeur2020, Hasker2011}.
+
+\citet{Hasker2011} introduces \textit{UMLGrader}, an automated tool that provides feedback on student-created UML class diagrams by comparing them against a reference solution. UMLGrader identifies missing or incorrect elements, such as class names, associations, and multiplicities. Their evaluation shows that it improves the accuracy of students in constructing diagrams, especially for constrained problems with a clear expected solution, making it beneficial for teaching foundational UML concepts.
+
+\citet{Bian2019} propose an automated grading approach for UML class diagrams, addressing the challenge of manually grading large volumes of assignments with varied, correct solutions. Their approach uses a metamodel to map instructor solutions to student submissions and an algorithm that applies syntactic, semantic, and structural matching to assess alignment with the solution template. By assigning partial marks for minor errors, such as misplaced attributes or associations, their tool, implemented in the \textit{TouchCORE} platform~\cite{schottle2015}, achieves a grading accuracy close to human assessments.
+%
+Moreover, \citet{Bian2020} investigate the effectiveness of automated grading for UML class diagrams through case studies in introductory and advanced software engineering courses. The study highlights the need for flexible grading criteria, as instructors may have different grading styles, and multiple correct solutions often exist for modeling problems. They address this by incorporating configurable grading settings and alternative solution models.
+
+\citet{hosseinibaghdadabadi2023} introduce an automated grading system for use case models. The proposed system uses structural, syntactic, and semantic matching techniques and natural language processing to align student use cases with instructor models. A flattening algorithm removes hierarchical structures, simplifying comparison by directly matching individual use case steps. The flattening step bears similarity with the tokenization step in token-based plagiarism detection, where models or programs are linearized.
+
+\citet{chen2024} propose an embedding-based approach for automated assessment of domain models. The system leverages text embeddings and graph similarity techniques to match student-generated domain models with instructor-defined reference models automatically. The approach involves multi-stage matching of classes, attributes, and relationships within the models, using cosine similarity and graph edit distance for accuracy.
+%
+Their approach shares similarities with token-based plagiarism detection systems like JPlag in its use of similarity scoring and structural matching of elements. However, it relies on element identifiers for matching, which is not suited for modeling plagiarism detection due to the threat of obfuscation attacks.
+
+\citet{hamann2024} introduce a model-driven approach to address interoperability challenges in automated assessment systems for computer science education. To that end, they provide a technology-independent assessment model, allowing assessment content to be transformed for various systems. This three-stage approach involves creating a meta-assessment model, generating task-specific assessment rules, and producing technology-specific representations. The system facilitates automatic, semi-automatic, and manual assessments while enabling flexibility and reusability in instructional resources.
+
+We identify three key aspects that define the differences between automated assessment and plagiarism detection systems in computer science education. Automated assessment aims to detect and evaluate differences between student submissions and a solution, measuring correctness. By contrast, plagiarism detection prioritizes identifying similarities despite the potential for obfuscation, meaning it must be robust against intentional alterations designed to obscure plagiarized content.
+%
+Additionally, plagiarism detection operates in an adversarial context, where students may attempt to evade detection by disguising similarities through various obfuscation techniques. Automated assessment, however, sees the opposite behavior: students aim to align their submissions as closely as possible with the solution, focusing on correctness rather than concealment.
+%
+Scalability also differs significantly between these processes. Automated assessment generally involves a linear complexity, where the work of each student is compared to either a single solution or a small set of solutions. This results in a linear comparison process with a $O(n)$ complexity. In contrast, plagiarism detection typically requires pairwise comparisons among all submissions, resulting in $O(n^2)$ complexity, making efficient performance optimization more critical for practical application in large courses.
+
+% --------------------------------------------------------------------------------------------
+\section{Genome Sequencing}\label{sec:rw-genome} % in Bioinformatics}
+We also relate to research related to genome sequencing in bioinformatics, which is the process of determining the entire genetic sequence of a specific organism or cell type.
+%
+In bioinformatics, \textit{Indel} detection is used to identify pairs of genome sequences that differ due to insertions and deletions (indels). This sequence variation is essential for studying genetic mutations and understanding human diseases. Interestingly, the core challenge in indel detection is conceptually similar to software plagiarism detection, where identifying similar program pairs despite minor alterations in token sequences is crucial. Both tasks fundamentally detect meaningful sequence alignment amid small, possibly superficial changes.
+
+\textit{TransIndel}, developed by \citet{Yang2018}, is a framework designed specifically for detecting indels by comparing genome sequences composed of specific sequence segments called \textit{chimeric reads}. TransIndel operates by taking two sequences as input and iterating through them using a fixed window size to analyze chimeric reads. 
+It then evaluates possible alignments within this window to infer insertions or deletions. When two possible alignments occur due to an extra chimeric read in the target sequence, the framework marks the chimeric read as deleted from the read sequence. Conversely, if no alignment is possible because of an additional read in the read sequence, it is marked as inserted into that sequence. TransIndel effectively aligns sequences while remaining robust to indels by focusing on possible alignments with this iterative window.
+
+The fixed window algorithm has some similarities to greedy string tiling~\cite{Wise1993} and winnowing~\cite {Schleimer2003}. In fact, greedy string tiling has seen use in bioinformatics~\cite{Wise1995}, particularly for aligning nucleotide or amino acid biosequences. This approach can detect transpositions, rearrangements, and repeated substrings that are often missed by earlier alignment algorithms, such as those based on dynamic programming.
+Additionally, the ability of the algorithm to group amino acids based on substitution matrices enhances its biological relevance, allowing it to account for evolutionary mutations. Greedy string tiling was thus particularly used for large-scale sequence comparisons and database searches.
+
+Moreover, the fixed window algorithm is similar to one of our defense mechanisms.
+The principles of insertion and deletion in sequence alignment closely resemble the ideas of subsequence match merging, which heuristically merges split matches to reverse the effects of obfuscation attacks. A difference, however, is that subsequence match merging operates heuristically in order to avoid assumptions on the underlying token sequence and the presence of obfuscation, thus making it attack-type independent. In contrast, the fixed window algorithm involves string domain-specific considerations regarding genome sequences. Furthermore, subsequence match merging works iteratively and terminals when no more matches can be merged. In contrast, the fixed window algorithm does not iterate repeatedly but only processes sequences sequentially in a single pass.
+
+The \textit{Needleman–Wunsch algorithm}~\cite{Needleman1970} uses dynamic programming to find the globally optimal alignment between two sequences. In Bioinformatics, genome sequences are aligned by applying a scoring system where matches, mismatches, and gaps (often representing indels) are assigned specific points. The algorithm builds a matrix to compute the best alignment score between two sequences, with the final score located in the bottom-right cell. By backtracking through this matrix, the algorithm identifies the optimal alignment path.
+
+Although computationally intensive, this approach could theoretically be applied to software plagiarism detection, aligning token sequences with an appropriate scoring system to assess similarity. However, the high computational complexity of the algorithm may make it impractical for larger datasets or courses with extensive code submissions.
+%
+Conversely, subsequence match merging \textit{could} be applied for problems in bioinformatics.
+However, it does not compute an alignment path or seek an optimal global alignment (e.g., to maximize the sequence similarity).

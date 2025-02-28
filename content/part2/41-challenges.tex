@@ -1,0 +1,64 @@
+%\section{Challenges of Modeling Plagiarism}
+\section{Understanding Modeling Plagiarism}\label{sec:mde-considerations}
+
+\noindent
+In traditional software engineering, code represents instructions for a computer program's behavior, while models represent abstract concepts and relationships between entities in a system.
+This distinction is, however, blurred, as code can be considered just another model in the context of model-driven engineering~\cite{Stachowiak1973}. This aligns with the mantra \enquote{\textit{everything is a model}} \cite{Bezevin2005}. Code can be viewed as a lower-level model, which is often derived from higher-level, abstract models. Both models and code are interconnected representations of the same system, with code being an executable model that conforms to the specifications of higher-level models.
+Most modeling artifacts have graph-like or tree-like structures or can be transferred into them, for example, through containment references in \ac{MOF}-based metamodels.
+Similarly, while code is a text-based entity, it can be parsed into a parse tree, for example, an \ac{AST}.
+Thus, models can, just like code, describe a program's structure and behavior. However, in practice, there are differences between \textit{typical} modeling assignments~\cite{Ciccozzi2018} and typical programming assignments~\cite{Schulte2006}.
+
+%\subsection{Assumptions}
+Based on the mentioned differences, we make the following assumptions.
+Modeling assignments often focus on creating high-level abstractions, such as diagrams and formal specifications, which capture the structure, behavior, and relationships of a system. These assignments emphasize understanding and representing domain concepts accurately and may involve tools and languages specific to modeling, such as \ac{UML}, \ac{EMF} or \ac{SysML}~\cite{Kienzle2024}. On the other hand, programming assignments typically require students to write executable code that directly implements algorithms and functionality. These assignments emphasize problem-solving, algorithmic thinking, object-oriented modeling, and mastery of programming language syntax.
+As a result, the skills and tasks involved in modeling assignments differ from those in programming assignments. 
+Based on these assumptions, notable differences exist between models and code in the context of plagiarism detection.
+
+\subsection{Requirements for Detection Systems}
+Based on these differences, we identify the following requirements for modeling plagiarism detection:
+% Basic Requirements:
+Modeling assignments pose a unique challenge because models typically operate at a higher level of abstraction, providing fewer details for detection~\cite{Saglam2022}. Furthermore, approaches designed for code rely on linearization, a process that is not trivial for models in general~\cite{Saglam2024a}. 
+Last, visualization of suspicious candidates necessitates specialized graphical or textual views to provide the necessary explainability~\cite{Karnalim2021} for effective plagiarism detection. For code, this is trivial, as the code itself can be used~\cite{Saglam2024a}.
+
+Consequently, there is a need for a tool-based solution that addresses these challenges and tackles the problem at scale~\cite{Saglam2023}.
+Such a solution must provide explainability and traceability for educators to understand why a student submission is identified as suspicious.
+Thus, a good plagiarism detector informs and assists educators in decision-making and processes in misconduct investigations, which vary significantly across institutions.
+Tool-based solutions should help educators by identifying suspicious candidates while leaving final decision-making to the educators to uphold ethical standards~\cite{Le2013}.
+
+% Key Requirement: Compatibility with different modeling languages
+Another crucial aspect is modeling language compatibility, which allows educators to benefit widely from these approaches.
+Educators may find the use of plagiarism detectors infeasible if a significant effort is required to tune plagiarism detectors for specific modeling languages or artifacts; using them becomes infeasible.
+Generalized approaches independent of specific modeling languages or tools are not intricate enough to provide helpful feedback for any modeling assignment.
+%
+
+Educators must be conscious of these limitations. Therefore, plagiarism detectors should be designed to enable educators to recognize situations where the results lack conclusiveness, enabling them to make well-informed and ethical decisions.
+In the following, we will discuss four differences between modeling artifacts and code that present challenges for (token-based) plagiarism detection of modeling artifacts.
+
+\subsection{Challenges}\label{sec:mde-challenges}
+We identify the need for effective plagiarism detection approaches for modeling artifacts that are mature enough for practical application. There is significant interest in this topic among educators in the model-driven community, especially with the recent rise of generative AI\footnote{This interest led to my invitation to deliver a keynote~\cite{Saglam2024Keynote} at the \textit{Educators Symposium} of the 2024 \textit{MODELS} conference~\cite{models2024_preface}.}.
+However, modeling plagiarism detection comes with the following \textbf{challenges}:
+\paragraph{Abstraction Level and Granularity}
+Modeling artifacts typically represent a system at a higher level of abstraction than code, thus often containing less detail, which presents an added challenge for plagiarism detection~\cite{Saglam2022}.
+Moreover, the granularity of modeling artifacts can vary significantly. Modeling artifacts can range from high-level conceptual models to detailed design specifications. These models often capture domain concepts and relationships at a higher level of abstraction, which may not directly map to concrete implementations. In contrast, code is generally more consistent in granularity, focusing on implementation details. Code is directly executable and is closer to the machine level, with precise operational semantics. This means that code typically includes more details than modeling artifacts, making distinguishing between unrelated similarities and actual plagiarism easier. However, in modeling assignments, the lack of details can make it harder to identify plagiarism, as superficial similarities may be more common and less indicative of copying~\cite{Saglam2024a}.
+It is an inherent challenge in plagiarism detection that in small assignments, the solution space collapses, rendering it impossible to differentiate between plagiarism and random, disjointed similarities.
+This problem, while present in coding assignments with a small solution space, is exacerbated for modeling assignments due to the higher level of abstraction and varying granularity.
+
+\paragraph{Structural Complexity}
+Modeling artifacts often involve complex, hierarchical structures such as metamodels, models, and transformations. These can also include behavioral models, which add another layer of complexity. For example, a behavioral model might describe the dynamic behavior of a system through state machines or sequence diagrams. In contrast, code is \textit{typically} linear and sequential, with a linear declaration order via statement order and a primarily linear execution order, as code defines partial order for statement interdependence, making it easier to tokenize and linearize. Although there are some exceptions, this generally holds true for programming languages commonly used in education and for most language constructs within their syntax.
+The sequence of statements in code is critical in determining the code's behavior. While some statements can be reordered without changing the code's behavior, there is only a limited possibility of doing so.
+Therefore, the reordering of statements must be executed with caution, as it can drastically modify the program's functionality.
+
+In contrast, the degree to which the order of elements in a model affects the system behavior depends on the metamodel and the model's intended use. Often, the order of elements in a model, especially in multi-valued containment references, can be freely altered. Even if it cannot be freely changed, some degrees of freedom usually exist.
+Moreover, the structural aspects of modeling artifacts mean that strategies for tokenization and comparison can vary significantly between different types of models. Behavioral models, in particular, present a challenge due to their dynamic nature and the need to capture semantic aspects and interactions, which are less straightforward to represent and compare in a linear token-based approach.
+
+\paragraph{Representation and Notation}
+Modeling artifacts use diverse notations, often graphical, such as \ac{UML} diagrams. These notations may not be easily linearizable (or at least not in a meaningful manner), and their serialized representation in files is often not human-readable or directly representative of their semantic or graphical form~\cite{Harel2004}. In contrast, code uses textual syntax with well-defined semantics, and the representation in files is also the representation used by humans. This difference means that visualizing matched subsequences for plagiarism detection cannot be done effectively using the file representation alone for modeling artifacts. Instead, a specific view tailored to the type of modeling artifact is required to accurately represent and compare the structures and relationships captured in the model.
+
+\paragraph{Models and Semantics}
+In the context of model-driven engineering, there is no universal definition of semantics for models.
+Unlike code, models are often not executable. For metamodels, we typically distinguish static semantics from dynamic semantics~\cite{Stahl2006}. The static semantics describe rules and constraints that are not expressed through the abstract syntax. The dynamic semantics express the meaning of the constructs. Dynamic semantics is often specified not formally but only through natural language text~\cite{Brambilla2017}.
+As a consequence, the differentiation between semantic-preserving, semantic-agnostic, and semantic-deviating obfuscation is blurred in the context of modeling plagiarism. Only if there is a clearly defined dynamic semantics, for example, for executable models, can this separation be made to the same extent as for code.
+
+\paragraph{Obfuscation Techniques}
+As students tend to be creative in obfuscating their plagiarism~\cite{Saglam2023, Karnalim2016}, plagiarism detectors must be resilient against common obfuscation attempts.
+The techniques for obfuscating modeling artifacts are less clear than those for code. Most research on plagiarism detection focuses on code~\cite{prechelt2000, MOSS, Maertens2022}, where common obfuscation techniques are well researched~\cite{Faidhi1987, Karnalim2016, Novak2019, Novak2020}. There is substantial research on code obfuscation and its impact on plagiarism detection. However, the lack of extensive research on how modeling artifacts are obfuscated presents a challenge for token-based plagiarism detection in this domain. The unknown nature of potential obfuscation techniques for models makes it difficult to develop robust defense methods.

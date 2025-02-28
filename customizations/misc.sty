@@ -1,0 +1,76 @@
+% Additional packages
+\RequirePackage[nolist,nohyperlinks]{acronym}
+\RequirePackage{booktabs}
+\RequirePackage{graphicx}
+\RequirePackage{etoolbox}
+\RequirePackage{listings}
+\RequirePackage{color}
+\RequirePackage{marvosym}
+\RequirePackage{pifont}
+\RequirePackage{amsmath}
+\RequirePackage{stmaryrd}
+\RequirePackage{multirow}
+\RequirePackage{makecell}
+\RequirePackage{xfrac}
+\RequirePackage{tabularx}
+\RequirePackage{textcomp}
+\RequirePackage{soul}
+\RequirePackage{algorithm}
+\RequirePackage{algpseudocode}
+\RequirePackage{listings}
+\RequirePackage{xspace}
+\RequirePackage{subcaption}
+\RequirePackage{siunitx}
+\RequirePackage{tcolorbox}
+\RequirePackage{fontawesome}
+\RequirePackage[ngerman,english]{babel}
+
+
+% Custom commands
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{\ding{55}}
+\newcommand{\needCite}[0]{\hl{[x]}\xspace}
+
+% Boxes
+\newcommand{\highlight}[3]{%
+  \begin{tcolorbox}[
+    colback=black!1!white,
+    colframe=white!20!black,
+    center,
+    valign=top,
+    halign=left,
+    before skip=0.3cm,
+    after skip=0.4cm,
+    center title,
+    boxrule=1pt,
+    boxsep=-2pt,
+    top=7pt,
+    bottom=7pt,
+    left=10pt,
+    right=10pt,
+    width=\linewidth
+  ]
+  #1\xspace\textbf{#2:} #3
+  \end{tcolorbox}
+}
+
+% Findings and research questions
+\newcommand{\finding}[1]{\highlight{\faInfoCircle}{Finding}{#1}}
+\newcommand{\researchquestion}[2]{\highlight{\faQuestionCircle}{Research Question #1}{#2}}
+
+\newcommand{\RQ}[1]{\hyperref[rq:#1]{\faQuestionCircle\xspace\textbf{Research Question #1}\xspace}}
+
+% Reading paths
+\newcommand{\readingpath}[1]{\faChevronCircleRight\,\,{\hyperref[#1]{\autoref*{#1}: \nameref*{#1}}}}
+
+% Own publications part
+\newcommand{\ownpublications}[1]{\highlight{\faBook}{Literature}{%
+This chapter is based on my following peer-reviewed publications:\xspace\linebreak#1}}
+
+% Redefinitions
+\addto\extrasenglish{
+\renewcommand{\chapterautorefname}{Chapter}
+\renewcommand{\sectionautorefname}{Section}
+\renewcommand{\subsectionautorefname}{Subsection}
+}
+

@@ -1,0 +1,135 @@
+\chapter{Conclusion}\label{cha:conclusion}
+This dissertation contributes to the field of software plagiarism detection, addressing emerging threats to academic integrity posed by automated obfuscation attacks.
+%
+Plagiarism is a prevalent challenge in computer science education, especially in beginner-level and mandatory courses~\cite{Cosma2008, Park2003}. Students are creative in \textit{obfuscating} their plagiarism to conceal the relation to its source~\cite{Pawelczak2018}.
+Educators address this challenge at scale by relying on software plagiarism detection systems, which help them identify suspicious candidates~\cite{Braumoeller2001, mozgovoy2007}, although deciding which cases constitute plagiarism is ultimately a human decision~\cite{Culwin2001, Weber2019}.
+%Most software plagiarism detection systems compare the structure of the code~\cite{Nichols2019}, and among them, token-based approaches like JPlag~\cite{prechelt2000} are the most widely employed in practice~\cite{Novak2019}.
+
+However, state-of-the-art plagiarism detection systems are vulnerable to automated obfuscation attacks~\cite{DevoreMcDonald2020, Foltynek2020, Biderman2022}, which is exacerbated due to the recent advancements of generative artificial intelligence~\cite{ChatGPTGuide, Daun2023}, which make automated obfuscation easier than ever before~\cite{Khalil_Er_2023}.
+Thus, obfuscation attacks present a significant challenge for educators in practice, threatening academic integrity (\probref{1}).
+
+Finally, current plagiarism detection systems do not support artifacts of modeling assignments (\probref{2}), which are increasingly common in computer science education~\cite{Ciccozzi2018, Engels2006}. Modeling assignments are prone to plagiarism due to their complexity and high level of abstraction, making plagiarism detection more challenging. Thus, there is a practical need for obfuscation-resilient plagiarism detection systems for modeling artifacts~\cite{Martinez2020}.
+
+Based on these two problems, we addressed our research goal of providing state-of-the-art software plagiarism detection systems with resilience against automated obfuscation attacks, supporting both programming and modeling languages, thus enabling educators to address emerging challenges in practice.
+
+This final chapter concludes this dissertation, and the remainder is structured as follows.
+%First, we emphasize the primary challenges that drive our research.
+First, we summarize the contributions of this dissertation and their benefits.
+Second, we discuss the findings of our evaluation.
+Third, we revisit our main research questions.
+Lastly, we conclude the dissertation with some final reflections.
+
+%\section{Motivation}
+%Plagiarism is a prevalent challenge in computer science education, facilitated by the ease of duplicating and modifying digital assignments \cite{Cosma2008, Murray2010, Le2013}.
+%Students are creative in \textit{obfuscating} their plagiarism to conceal the relation to its source~\cite{Pawelczak2018}.
+%Plagiarism in programming assignments is particularly pronounced in beginner-level and mandatory courses~\cite{Park2003}.
+
+%In light of these issues, it is common for educators to use software plagiarism detection systems~\cite{BottoTobar2022}, which allows for tackling the problem of plagiarism detection at scale.
+%Most approaches compare the structure of the code~\cite{Nichols2019, Novak2019}, and among them, token-based approaches like MOSS~\cite{MOSS} or JPlag~\cite{prechelt2000} are the most widely employed in practice~\cite{Novak2019}.
+%We extract and compare only the structure of programs~\cite{Novak2019}, thus intentionally abstracting from details~\cite{prechelt2002}.
+%Educators strongly rely on software plagiarism detectors to find suspicious candidates at scale~\cite{BottoTobar2022}, although it ultimately is a human decision to which candidates plagiarized~\cite{Culwin2001, Weber2019}.
+
+%While these detectors are only adequate when defeating them takes more effort than completing the actual assignment~\cite{DevoreMcDonald2020}, a widespread assumption is that evading detection is not feasible for novice programmers~\cite{Joy1999}.
+%However, this assumption has been broken with the recent rise of automated \textit{obfuscation attacks}~\cite{DevoreMcDonald2020, Foltynek2020, Biderman2022, Pawelczak2018}, which allows avoiding detection by strategically altering the structure of the plagiarized program. Most obfuscation attacks try to avoid changing the original program behavior, which will likely result in incorrect solutions. The challenge of automated obfuscation intensified with the rise of generative artificial intelligence ~\cite{ChatGPTGuide, Daun2023}, making automated obfuscation easier than ever before~\cite{Khalil_Er_2023, Saglam2024a}.
+%Thus, automated plagiarism detection presents a significant challenge for educators in practice, as we must now contend with increasingly sophisticated and accessible obfuscation techniques that leave detection systems vulnerable and threaten academic integrity (\probref{1}).
+
+%Finally, current plagiarism detection systems do not support artifacts of modeling assignments (\probref{2}), which are increasingly common in computer science education~\cite{Ciccozzi2018, Stahl2006, Engels2006}. Modeling assignments are prone to plagiarism due to their complexity and high level of abstraction, making plagiarism detection more challenging. Thus, there is a practical need for obfuscation-resilient plagiarism detection systems for modeling artifacts~\cite{Martinez2020}.
+
+
+\section{Research Contributions and Benefits}
+In this dissertation, we have proposed novel defense mechanisms for state-of-the-art software plagiarism detection systems that provide resilience against automated obfuscation attacks. We have provided support for both programming and modeling languages, thus enabling educators to detect software plagiarism reliably.
+%
+To that end, we have introduced the following three contributions: 
+\begin{enumerate}[label=\textbf{C\arabic*}]
+    \item A comprehensive threat model for obfuscation attacks targeting software plagiarism detection systems focusing on automated, behavior-preserving attacks.\\ {\sfancycite{Saglam2024b} \sfancycite{Saglam2024d}} 
+    \item An approach to enable token-based plagiarism detection for modeling assignment artifacts, especially in model-driven engineering.\\ {\sfancycite{Saglam2024a} \sfancycite{Saglam2023} \sfancycite{Saglam2022}} 
+    \item Three defense mechanisms against automated obfuscation attacks that provide broad obfuscation resilience for software plagiarism detection.\\ {\sfancycite{Saglam2024b} \sfancycite{Saglam2024a} \sfancycite{Saglam2024d} \sfancycite{Saglam2024c}}
+\end{enumerate}
+
+First (\contribution{1}), we establish a threat model for obfuscation attacks targeting software plagiarism detectors, classifying different attack types by their effectiveness and applicability. We show that all obfuscation attacks must disrupt the matching of subsequences to be effective, requiring them to affect the internal program representation of detection systems.
+The second contribution (\contribution{2}) introduces an approach to detect plagiarism in models and other modeling artifacts by applying established concepts of token-based detection systems to the model-driven domain.
+
+The third and main contribution (\contribution{3}) presents three novel defense mechanisms to systematically address the attacks identified in our threat model. The first defense mechanism is token sequence normalization, which counters insertion- and reordering-based obfuscation attacks by creating a token normalization graph for each program and normalizing the token sequences via this graph.
+The second defense mechanism is subsequence match merging, which reverses the splitting of subsequences by iteratively merging neighboring subsequence matches, thus providing attack-independent obfuscation resilience.
+The third defense mechanism is model subtree reordering, which targets modeling assignments and counters reordering attacks via a recursive algorithm that reorders model elements via the token distribution for an extracted model.
+
+With this dissertation, we contribute to the ongoing discussion surrounding plagiarism in education. Our contributions provide multiple benefits for educators in practice: First, we provide insights into the effectiveness of different obfuscation attacks, allowing educators to understand which obfuscation patterns to expect during inspections.
+Furthermore, our proposed defense mechanisms provide broad obfuscation resilience to state-of-the-art detection systems, thus significantly reducing the effectiveness of obfuscation attacks.
+
+\section{Evaluation and Results}
+For this dissertation, we have conducted a comprehensive empirical evaluation to demonstrate the effectiveness of our contributions.
+Over the entirety of this evaluation, we have analyzed over \textit{4 million data points} based on datasets comprising over 14,000 files with over a million lines of code.
+
+We have evaluated our contributions with a wide range of real-world datasets~\cite{paiva2023, Ljubovic2020a, Saglam2024b} from different university courses, including programming and modeling assignments. These courses range from mandatory undergraduate courses to master's-level elective courses. Furthermore, they contain different-sized programs and models, thus representing typical use cases for software plagiarism detection.
+In our evaluation, we employ a total of \textit{nine} different obfuscation techniques for the plagiarism instance.
+We use both algorithmic and AI-based obfuscation and use existing tools like GPT-4~\cite{gpt4} and \mossad~\cite{DevoreMcDonald2020}.
+We have thus systematically addressed the obfuscation attacks introduced in our threat model.
+
+We evaluated our defense mechanisms regarding their ability to provide obfuscation resilience across diverse datasets and attack types.
+The results show that we \textit{significantly} improve resilience against automated obfuscation attacks.
+We achieved a median similarity difference increase of up to 99.65 percentage points against semantic-preserving insertion-based obfuscation. We also show substantial improvements against alteration-based attacks (up to 42 percentage points) and refactoring-based attacks (up to 22 percentage points). While resilience against AI-based obfuscation was comparatively lower (up to 19 percentage points), we still effectively improved detection rates, including a notable 6.5 percentage point increase in identifying AI-generated programs even though the defense mechanisms are not designed for this use case.
+
+We evaluate our approach for token-based modeling plagiarism detection regarding its detection quality and obfuscation resilience.
+The results show broad resilience to algorithmic obfuscation attacks, including strong resistance to insertion and deletion-based attacks, as well as immunity to renaming and reordering-based attacks.
+Our approach consistently achieves effective separation from unrelated pairs for manually obfuscated plagiarism, with a median similarity difference of up to 74 percentage points.
+Finally, the results show high similarity scores for AI-obfuscated plagiarism, with median similarity differences improving by up to 25 percentage points over the state-of-the-art.
+The results demonstrate the feasibility of our approach and that it significantly outperforms the state-of-the-art.
+
+In summary, our empirical evaluation demonstrates the effectiveness of our contributions.
+Our proposed defense mechanisms provide resilience against various automated obfuscation attacks while minimizing the effect on unrelated programs. Furthermore, our defense mechanisms even improve the detection of fully AI-generated programs by increasing similarity scores among these programs.
+%
+These findings underscore the effectiveness of our contributions, allowing for resilient plagiarism detection in both programming and modeling contexts. For replicability, we have included our evaluation artifacts in the dedicated replication package~\fancycite{replication-package}.
+
+\section{Research Questions Revisited}
+The overarching research goal of this dissertation is to make state-of-the-art software plagiarism detectors resilient against automated obfuscation attacks, supporting both programming and modeling languages.
+We define three primary research questions and successfully address them based on our contributions. Furthermore, our empirical evaluation demonstrates that our contributions fulfill the aforementioned research goal.
+
+\textit{\rqref{1}: What is a suitable threat model for obfuscation attacks targeting state-of-the-art software plagiarism detection systems?}
+%
+To find a suitable threat model, we categorize automated obfuscation techniques. By conducting an attack surface analysis, we derived the key insight that all obfuscation attacks must disrupt the matching process of detection systems to be effective. This disruption involves affecting the internal representation of these systems.
+%
+This insight is essential as it allows for assessing obfuscation attacks solely based on their impact on token sequences. By doing so, we simplify the space of possible attacks, abstracting from the inherent complexity of programming languages. %This insight directly informed the design of our defense mechanisms.
+%s
+Moreover, we introduce a formal notation for token sequence modification, distinguish different types of automation, including generative AI, and define the concept of intrusiveness, which means whether obfuscation attacks alter program behavior.
+%The threat model also provides insights for educators by highlighting which obfuscation patterns are most likely to appear in real-world scenarios.
+
+\textit{\rqref{2}: What is the most effective way to apply token-based plagiarism detection techniques to artifacts of modeling assignments?}
+%
+We found that the most effective way is to represent the structural aspects of models as token sequences by abstracting from the details while retaining the key features of the models.
+For the tokenization, domain-specific extraction rules should be defined for each modeling language based on the detailed guidelines and principles provided in this dissertation. If available, the most effective approach is to utilize textual syntaxes for the modeling domain for visualization of matched sections, as they enable the presentation of results in formats familiar to educators who work with code plagiarism detectors.
+We recommend reusing the subsequence matching, similarity calculation, and post-processing from state-of-the-art approaches.
+%
+Finally, normalization techniques further enhance obfuscation resilience by addressing permissible variations in model structures.
+
+\textit{\rqref{3}: Which mechanisms provide state-of-the-art software plagiarism detection systems with resilience to automated obfuscation attacks?}
+%
+We identified two fundamental categories of defense mechanisms, namely attack-specific and attack-independent approaches.
+Attack-specific approaches, such as token sequence normalization and model subtree reordering, target specific obfuscation attacks that are either particularly effective or easy to implement. These mechanisms provide strong but narrow resilience, effectively countering known attack types.
+Attack-independent approaches, such as subsequence match merging, provide broad resilience by addressing fundamental vulnerabilities. They allow us to address unknown or emerging threats.
+Overall, the effective defense mechanisms operate close to the underlying attack surface identified in our threat model. Making the subsequence matching invariant to disruptions ensures that obfuscated plagiarism instances are detected with high reliability.
+
+\section{Closing Remarks}
+
+This dissertation advances the state of plagiarism detection by providing novel defense mechanisms for plagiarism detection systems that provide resilience against automated obfuscation attacks.
+Our proposed defense mechanisms include both tailored approaches that target specific obfuscation types and a broad, attack-independent mechanism that ensures resilience against a wide range of obfuscation strategies, including emerging and unknown threats.
+Additionally, we extend token-based plagiarism detection to modeling artifacts, filling a gap in modeling education as modeling becomes increasingly common in computer science curricula.
+In extensive empirical evaluation, our defense mechanisms demonstrated significant improvements in detection rates across a wide variety of obfuscation methods, achieving significant gains in similarity scores even under AI-based obfuscation.
+%This approach proved effective against automated obfuscation, outperforming the state-of-the-art approach.
+
+As our contributions have been integrated into the software plagiarism detection system JPlag~\cite{prechelt2002}, they are thus already used in academic institutions worldwide.
+%
+In conclusion, this dissertation offers practical solutions to emerging challenges in academic integrity. We contribute to more robust, obfuscation-resilient plagiarism detection, supporting educators in maintaining integrity across both programming and modeling assignments in a landscape increasingly shaped by automated obfuscation~\cite{Foltynek2020, Biderman2022}.
+
+Despite these advancements, it would be inadvisable to consider the problem of automated obfuscation in software plagiarism as solved.
+The rapid development of generative AI continues to reshape education~\cite{ChatGPTGuide}. 
+Educators and researchers must learn to adapt to these developments to anticipate possible implications on academic integrity.
+Addressing AI-based obfuscation attacks will require even greater focus in future investigations.
+Nevertheless, artificial intelligence should not be viewed as an all-encompassing threat; instead, it creates new challenges \textit{and} opportunities. Critically, we should focus on understanding its limitations and leveraging its strengths~\cite{Saglam2024Keynote}.
+
+Plagiarism detection systems excel at identifying structural similarities, while humans are uniquely capable of quickly identifying semantic nuances between programs given these similarities. This combination of large-scale analysis and human inspection has thus been very effective and will remain so for the foreseeable future. Fundamentally, however, tool-based plagiarism detection must always involve a human decision as a final step.
+% Additionally, contract cheating, where students outsource their assignments, remains an ongoing issue that detection systems alone cannot tackle.
+In addition to detection, prevention is just as important in combating plagiarism~\cite{Simon2016, Fincher2019}. Students often resort to plagiarism when overwhelmed and believe they have no other options~\cite{Amigud2019}.
+Proactive strategies such as student training, thoughtful assessment design, clear institutional policies, and counseling should thus be combined with detection approaches~\cite{Lancaster2023}.
+%
+Ultimately, plagiarism is a profoundly complex challenge that will always fundamentally remain a deeply \textit{human} issue.
+%As such, it must be treated with the utmost sensitivity and care.

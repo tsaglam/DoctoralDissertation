@@ -1,0 +1,19 @@
+\begin{table}[h]
+\centering
+\small
+%\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lrrrrrrrr}
+  \toprule
+Dataset & Variant & Pairs & $p$ & $W$ & $\delta$ & $\delta\,Int.$ & $\delta$ 95\% CI & n \\ 
+  \midrule
+   PROGpedia-19& SMM & P2S & 3e-06 & 378 & 0.962 & Very Large & [0.87, 0.99] & 27 \\ 
+   PROGpedia-56& SMM & P2S & 3e-06 & 378 & 0.828 & Very Large & [0.59, 0.93] & 28 \\ 
+   TicTacToe& SMM & P2S & 3.9e-10 & 1,275 & 0.934 & Very Large & [0.82, 0.98] & 50 \\ 
+   BoardGame & SMM & P2S & 4.8e-05 & 210 & 1.000 & Very Large & [1.00, 1.00] & 20 \\ 
+   Homework-1& SMM & P2S & < 1e-10 & 1,653 & 0.924 & Very Large & [0.77, 0.98] & 59 \\ 
+   Homework-5& SMM & P2S & 0.00011 & 171 & 0.932 & Very Large & [0.75, 0.98] & 18 \\ 
+   \bottomrule
+\end{tabular}
+\caption[Statistical Tests: Alteration-based Obfuscation]{One-sided Wilcoxon signed-rank test results for \textbf{alteration-based obfuscation} regarding the improvement by our defense mechanism compared to baseline (sig. level of $\alpha=0.01$, alternative hypothesis $H1=greater$, test statistic $W$, effect size via Cliff's delta $\delta$, its interpretation $\delta\,Int.$, its 95 percent confidence interval $CI$, and the sample size $n$). For plagiarism-to-source pairs (P2S), low $p$ and high $\delta$ are desirable.} 
+\label{tab:to-base-alter}
+\end{table}

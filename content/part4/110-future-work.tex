@@ -1,0 +1,98 @@
+\chapter{Future Work}\label{cha:future-work}
+While this dissertation provides advancements in detecting software plagiarism and resilience against obfuscation attacks, it also opens up new avenues for further exploration. The following discusses possible future work, emphasizing how our contributions can be extended, complemented, or applied to new problems.
+
+We begin by summarizing the limitations of our contributions and discussing future work that arises from them.
+Second, we discuss future work on cross-language and multi-language plagiarism detection.
+Next, we discuss emerging threats, especially with a focus on generative AI.
+Finally, we will discuss how our contributions could be applied in other fields, such as clone detection, automated assessment, and even bioinformatics.
+
+
+\section{Addressing Current Limitations}
+
+For each of our contributions, we detailed their current limitations in \autoref{sec:tsn-limits}, \autoref{sec:smm-limits}, \autoref{sec:msr-limits}, and \autoref{sec:mde-limits}.
+In the following, we discuss related work motivated by these limitations, showing what aspects could be improved upon in the future.
+
+\begin{description}
+\item[Token Sequence Normalization]
+As discussed in \autoref{sec:tsn-limits}, token sequence normalization is highly effective against insertion-based obfuscation attacks but has two limitations. The first limitation is that its effectiveness depends on the quality and accuracy of the extracted language-specific semantic information. In our evaluation, we discussed that while our implementation for Java programs is well-designed, the implementation for C++ does not cover all edge cases. Thus, the observed resilience is less pronounced in C++ programs. However, we also discussed that designing the semantic information extraction is more challenging for such a complex language with more ambiguity in its syntax and language specification.
+In future work, the semantic information extraction for C++ should be improved, thus allowing us to determine how well token sequence normalization can work for C++ programs.
+
+The second limitation is that we recently showed its applicability for object-oriented languages. Future work should explore how token sequence normalization works with different language paradigms, such as purely functional programming languages. This would provide further insights into how language-independent token sequence normalization is.
+
+Finally, and more independent of the current limitations, future work could incorporate additional semantic information from the programs to broaden the resilience of the approach.
+Token sequence normalization focuses on defending against known obfuscation techniques. In the future, we aim to proactively address emerging threats, such as attacks that tolerate minor program behavior changes.
+This could be addressed, for example, by representing and propagating uncertainty within the token normalization graph~\cite{Hahner2023}.
+
+\item[Subsequence Match Merging]
+As discussed in \autoref{sec:smm-limits}, subsequence match merging has two limitations: First, the heuristic nature of the defense mechanisms and the consequential impact on unrelated programs. We already introduced improvements to reduce this impact. However, future work could explore additional approaches to reducing the impact of subsequence match merging on pairs of unrelated programs.
+The second limitation of subsequence match merging is the reliance on two hyperparameters. While we systematically derived suitable default values via a grid search that works for many typical datasets, future work could address the problem by designing a mechanism that chooses suitable values based on the input datasets. For example, it could consider the distributions of tokens or matches for all input programs.
+
+\item[Model Subtree Reordering]
+As discussed in \autoref{sec:msr-limits}, model subtree reordering has three limitations. The first two, which are its dependence on identifying a suitable tokenization reference and its focus scope on reordering attacks, are inherent limitations. The third limitation is, similar to the ones of subsequence match merging, its effect on pairs of unrelated models. As model subtree reordering considers solely the tokens themselves to limit itself to a robust normalization criterion, it may negatively affect the similarity of unrelated models.
+While this is, to a degree, an inherent limitation of all normalization approaches, future work could explore techniques to improve model subtree reordering regarding this aspect. In detail, this might involve individual aspects of the underlying algorithm, such as how the token distribution vectors are used to reorder the subtrees.
+
+\item[Token-based Modeling Plagiarism Detection]
+As discussed in \autoref{sec:mde-limits}, our approach to enabling token-based modeling plagiarism detection has multiple limitations. The first one, regarding the domain-specific nature of the tokenization step, is inherent and can thus not be directly resolved. However, future work could explore suitable, domain-specific approaches for commonly used domains in modeling education.
+Here, we could also address the second limitation: the modeling domain affects how well our approach performs.
+Future work could thus conduct a large-scale evaluation with a wide variety of modeling datasets in different languages and from different contexts. Currently, however, this is limited by the availability of such data.
+\end{description}
+
+Finally, software plagiarism detection involves the ongoing challenge of defending against obfuscation attacks. While our contributions provide significant improvements, we do not consider this challenge solved. In fact, as in all adversary-defender scenarios, it is unrealistic to expect the issue to be solved completely.
+Future work should thus explore additional defense mechanisms. These could be specialized defense mechanisms for certain types of obfuscation attacks or attack-independent defense mechanisms such as subsequence match merging, which provide broad resilience. These defense mechanisms can be combined with ours to provide even stronger resilience against automated obfuscation attacks.
+
+\section{Cross-Language and Multi-Language Plagiarism Detection}
+As previously discussed, a prevalent issue in source code plagiarism detection is that many approaches are not publicly available and are exclusively used by their creators~\cite{Novak2019}.
+This lack of openness hinders broader adoption and comparative research.
+While there are some approaches for multi-language and cross-language software plagiarism detection~\cite{Arwin2006}, the tools used in practice do not support this scenario. In plagiarism detection for natural language text, this is a commonly discussed scenario~\cite{BottoTobar2022}.
+
+Multi-language support is increasingly relevant for modern educational settings and software engineering tasks. Polyglot assignments, where multiple programming languages are used within a single project~\cite{Mussbacher2024}, would benefit from plagiarism detection systems that can analyze all programming languages involved. Here, the program code of each language should be compared across student's solutions.
+This would also integrate well with support for modeling assignments, as model-driven projects contain models and code. In token-based approaches, enabling multi-language support would require the integration of a language identifier in each token, ensuring only tokens of the same language are matched.
+
+Cross-language software plagiarism allows the detection of plagiarism across programs of different languages. With the advancements in large language models, translating programs into other programming languages has become straightforward~\cite{Pan2024b}. 
+%If an assignment allows participants to choose their programming language, translating a program is a feasible obfuscation strategy.
+When students can choose their preferred programming language, translating a program into a different language becomes a viable obfuscation strategy.
+Supporting cross-language plagiarism detection in state-of-the-art tools would close this loophole, allowing for a more robust evaluation of programming assignments.
+Supporting cross-language plagiarism detection in state-of-the-art tools would close this gap, allowing for more resilient plagiarism detection.
+
+%One approach to addressing this issue would be creating shared token sets between programming languages for tokens frequently extracted for multiple languages.
+One potential approach to addressing cross-language plagiarism detection is to create shared token sets for common programming constructs across languages.
+%Examples of such common tokens include class, method, and variable declaration tokens and tokens for control structures.
+Tokens representing concepts such as class declarations, method definitions, variable assignments, and control structures are prime candidates for such shared sets. 
+It would also be possible to introduce multiple shared token sets for different concepts and paradigms, such as object orientation or functional programming, similar to the deduplication of concepts via commonalities~\cite{Klare2019}. These shared token sets would enable cross-language comparisons by focusing on the underlying structural similarities rather than language-specific syntax.
+
+
+\section{Emerging Threats}
+As discussed in \autoref{sec:discussion-ai}, AI-based attacks~\cite{Biderman2022}, particularly those utilizing generative AI, present a growing concern for plagiarism detection.
+The rapid development in generative AI may lead to emerging threats that warrant close attention~\cite{Lancaster2023}.
+Recent advances in generative AI present significant challenges and opportunities for enhancing socio-technical systems, making it essential to balance technological progress with human-centered values~\cite{Boltz2024}.
+
+Based on our evaluation results, AI-based obfuscation is \textit{currently} the more effective than fully generating programs via generative AI based on the assignment descriptions. However, with future advancements, this may be subject to change.
+Although our results demonstrate that our defense mechanisms provide some resilience against AI-based plagiarism, this only reflects the current state of generative AI.
+Future threats will likely employ more advanced techniques, making AI-based plagiarism an essential topic for future work.
+For AI-based obfuscation, one could explore additional defense mechanisms that provide resilience for comprehensive semantic-agnostic attacks that employ a combination of various changes to obfuscate a program, as this is how AI-based obfuscation currently manifests.
+
+Regarding program generation, future work should investigate approaches that mitigate the effectiveness of exploiting generative AI to generate solutions from scratch. As generative AI advances, generating entire programs becomes feasible for more extensive programs and produces functionally correct programs for more complex assignments.
+Here, alternative techniques may need to be explored~\cite{karnalim2024, Ebrahim2024}. One solution could be AI-based detectors that act as countermeasures to generative AI. However, currently, such approaches have not demonstrated sufficient reliability or performance~\cite{WeberWulff2023, Pan2024, Khalil_Er_2023}. Another possibility lies in signature- or watermark-based methods, where the artifacts generated by AI are always identifiable as such. This could be done by recognizing specific patterns or characteristics inherent to AI-generated content~\cite{zhao2024provable, Jiang2023}. However, future work in this direction must consider completely new obfuscation techniques that aim to disrupt such signatures or watermarks.
+%
+Beyond detection, \citet{Lancaster2023} recommends other measures to address this problem, such as policy development, student training, and adapting assessment methods.
+
+Finally, semantic-deviating obfuscation attacks may become increasingly prevalent as software plagiarism detectors become more resilient to automated obfuscation. While semantic-deviating obfuscation is currently not favored as it does not guarantee that a plagiarized program still solves a given assignment, it is less limited in what techniques can be employed and is, thus, potentially a more effective attack. While attack-type independent defense mechanisms like subsequence match merging can already defend against semantic-deviating obfuscation attacks, further defense mechanisms may need to be explored in future work.
+
+\section{Application Beyond Plagiarism Detection}
+
+Our contributions focus on enhancing resilience against automated obfuscation attacks in software plagiarism detection. We could explore their applicability to different problems or other fields in future work.
+Software plagiarism detection is a subfield of the larger domain of software similarity, which includes related areas such as clone detection~\cite{Shobha2021review, ain2019, rattan2013}, automated assessment and grading~\cite{mala-mutka2005, paiva2022, higgins2005}, anti-pattern detection~\cite{palomba2014}, and bug detection~\cite{zhang2015}. Future work could investigate how our defense mechanisms can be adapted to find use in these contexts. This requires further investigation of the domains and their specific requirements and adaptation of the defense mechanisms, explicitly considering the non-adversarial nature of these research areas.
+
+\begin{description}
+    \item[Clone Detection]
+    Our defense mechanisms may be adapted for software clone detection, as this field is probably the closest to plagiarism detection. Token sequence normalization can be used to match code clones, which differ as they contain dead code. Subsequence match merging could detect code clones with many more minor changes throughout the clone. Model subtree reordering could be leveraged for model clone detection, specifically when model clones were reordered and are thus not detected as clones. Our approaches could especially help detect higher-level clones. 
+
+    \item[Automated Grading]
+    Our defense mechanisms could be adapted to address challenges in automated grading, particularly in recognizing correct student submissions that deviate from the expected solution in details irrelevant to the context of the given assignments.
+    Token sequence normalization could be used for programming assignments, specifically deviation through dead code and differing statement order.
+    Subsequence match merging could match semantically equivalent yet structurally different submissions across programming and modeling tasks. These mechanisms could help address the problem of fuzzy solution spaces in automated grading, improving fairness and accuracy in evaluation.
+
+    \item[Bioinformatics]
+    Beyond software similarity, subsequence match merging has potential applications in bioinformatics, specifically genome sequencing and alignment (see \autoref{sec:rw-genome}). There are similarities between the fields, as the greedy string tiling algorithm has also seen application in genome sequencing~\cite{Wise1995}.
+    Subsequence machine merging could help improve the task of aligning DNA sequences with slight variations, enhancing tools for genomic analysis. However, its suitability for such tasks remains to be evaluated especially as state-of-the-art approaches in bioinformatics may use entirely different techniques.
+\end{description}

@@ -1,0 +1,35 @@
+\begin{table}[h]
+	\centering
+	\small
+	\begin{tabular}{lrrrrrrrr}
+		\toprule
+		ds                              & Variant & Pairs & $p$     & $W$   & $\delta$ & $\delta\,Int.$ & $\delta$ 95\% CI & n  \\ 
+		\midrule
+		\multirow{3}{*}{{PROGpedia-19}} & TSN     & P2S   & 3e-06   & 378   & 1.000    & Very Large     & [1.00, 1.00]     & 27 \\ 
+		                                & SMM     & P2S   & 3e-06   & 378   & 0.904    & Very Large     & [0.70, 0.97]     & 27 \\ 
+		                                & Both    & P2S   & 3e-06   & 378   & 1.000    & Very Large     & [1.00, 1.00]     & 27 \\ 
+		\hline
+		\multirow{3}{*}{{PROGpedia-56}} & TSN     & P2S   & 2e-06   & 406   & 1.000    & Very Large     & [1.00, 1.00]     & 28 \\ 
+		                                & SMM     & P2S   & 2e-06   & 406   & 0.939    & Very Large     & [0.79, 0.98]     & 28 \\ 
+		                                & Both    & P2S   & 2e-06   & 406   & 1.000    & Very Large     & [1.00, 1.00]     & 28 \\ 
+        \hline
+		\multirow{3}{*}{{TicTacToe}}    & TSN     & P2S   & 3.9e-10 & 1,275 & 1.000    & Very Large     & [1.00, 1.00]     & 50 \\ 
+		                                & SMM     & P2S   & 8.4e-10 & 1,176 & 0.766    & Very Large     & [0.60, 0.87]     & 50 \\ 
+		                                & Both    & P2S   & 3.9e-10 & 1,275 & 1.000    & Very Large     & [1.00, 1.00]     & 50 \\ 
+        \hline
+		\multirow{3}{*}{{BoardGame}}    & TSN     & P2S   & 4.8e-05 & 210   & 1.000    & Very Large     & [1.00, 1.00]     & 20 \\ 
+		                                & SMM     & P2S   & 4.8e-05 & 210   & 0.545    & Large          & [0.20, 0.77]     & 20 \\ 
+		                                & Both    & P2S   & 4.8e-05 & 210   & 1.000    & Very Large     & [1.00, 1.00]     & 20 \\ 
+		\hline
+		\multirow{3}{*}{{Homework-1}}   & TSN     & P2S   & < 1e-10 & 1,770 & 1.000    & Very Large     & [1.00, 1.00]     & 59 \\ 
+		                                & SMM     & P2S   & < 1e-10 & 1,653 & 0.955    & Very Large     & [0.82, 0.99]     & 59 \\ 
+		                                & Both    & P2S   & < 1e-10 & 1,770 & 1.000    & Very Large     & [1.00, 1.00]     & 59 \\  
+		\hline
+		\multirow{3}{*}{{Homework-5}}   & TSN     & P2S   & 1.3e-4  & 170   & 0.889    & Very Large     & [0.45, 0.98]     & 18 \\ 
+		                                & SMM     & P2S   & 1.6e-4  & 153   & 0.969    & Very Large     & [0.83, 0.99]     & 18 \\ 
+		                                & Both    & P2S   & 1.1e-4  & 171   & 1.000    & Very Large     & [0.99, 1.00]     & 18 \\ 
+		\bottomrule
+	\end{tabular}
+	\caption[Statistical Tests: Insertion-based Obfuscation]{One-sided Wilcoxon signed-rank test results for \textbf{insertion-based obfuscation} regarding the improvement by our defense mechanism compared to baseline (sig. level of $\alpha=0.01$, alternative hypothesis $H1=greater$, test statistic $W$, effect size via Cliff's delta $\delta$, its interpretation $\delta\,Int.$, its 95 percent confidence interval $CI$, and the sample size $n$). For plagiarism-to-source pairs (P2S), low $p$ and high $\delta$ are desirable.} 
+	\label{tab:to-base-insert}
+\end{table}

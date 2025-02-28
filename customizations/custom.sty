@@ -1,0 +1,139 @@
+\RequirePackage{xargs}         % Allows the definition of commands with multiple optional arguments
+\RequirePackage{microtype}     % Improves typography with character protrusion and font expansion
+\RequirePackage{parcolumns}    % Provides an environment for typesetting parallel columns of text
+\RequirePackage{float}         % Improves control of floating objects like figures and tables
+\RequirePackage{xcolor}        % Provides advanced color handling
+\RequirePackage{colortbl}      % Adds color to tables
+\RequirePackage{tcolorbox}
+\RequirePackage{amsfonts}      % Provides access to additional math fonts
+\RequirePackage{enumitem}      % Customizes lists and their layout
+\RequirePackage{doi}           % Provides support for DOI numbers in references
+\RequirePackage{listings}
+
+% ---------------------------------------------------------------- %
+% --------- FIXES FOR STUFF COPIED FROM PAPERS ------------------- %
+% ---------------------------------------------------------------- %
+\newcommand{\citet}[1]{\textcite{#1}} % delegate from natbib syntax
+% ---------------------------------------------------------------- %
+
+\newenvironment{myquote}%
+  {\list{}{\leftmargin=0.1in\rightmargin=0.1in}\item[]}%
+  {\endlist}
+
+\newcommand{\mossad}{{MOSSad}\xspace} % The original authors use small caps, alternatives would be, e.g.,  caps lock
+\newcommand{\plaggen}{{PlagGen}\xspace}
+
+\newcommand{\B}[1]{\textbf{#1}} % more compact in tables
+
+\newcommand{\contribution}[1]{\hyperref[c#1]{\textbf{C#1}}}
+\newcommand{\rqref}[1]{\hyperref[rq#1]{\textbf{RQ#1}}}
+\newcommand{\qref}[1]{\hyperref[gqm-plan]{\textbf{Q#1}}}
+\newcommand{\gref}[1]{\hyperref[gqm-plan]{\textbf{G#1}}}
+\newcommand{\hyporef}[1]{\hyperref[hypo#1]{\textit{Hypothesis #1}}}
+\newcommand{\obsref}[1]{\hyperref[obs#1]{\textit{Observation #1}}}
+\newcommand{\probref}[1]{\hyperref[problem#1]{\textit{Problem #1}}}
+
+\newcommand{\gqm}{\hyperref[main-gqm]{\bfseries{GQM plan}}}
+
+
+\tcbset {
+  base/.style={
+    arc=0mm, 
+    bottomtitle=0.5mm,
+    boxrule=0mm,
+    colbacktitle=black!10!white, 
+    coltitle=black, 
+    fonttitle=\bfseries, 
+    left=2.5mm,
+    leftrule=1mm,
+    right=3.5mm,
+    title={#1},
+    toptitle=0.75mm, 
+  }
+}
+
+\newtcolorbox{factsheet}[1]{
+  colframe=black,      % Frame color
+  colback=black!2!white,                % Background color
+  colbacktitle=black!5!white,        % Title background
+  coltitle=black,               % Title text color
+  boxsep=6pt,                   % Padding inside the box
+  base={#1}                     % Use passed parameter
+}
+
+\newcommand{\summaryBox}[2]{\begin{tcolorbox}[colback=black!1!white,colframe=white!20!black,center,valign=top,halign=left,before skip=0.5cm,after skip=0.5cm,center title,sharp corners,boxrule=0pt,boxsep=-1pt,left=6pt,right=6pt,width=\linewidth]\textbf{Answer to \qref{#1}:} \textit{#2}\end{tcolorbox}}
+
+\newcommand{\readingPathBox}[2]{\begin{tcolorbox}[colback=black!1!white,colframe=white!20!black,center,valign=top,halign=left,center title,boxrule=0pt,left=6pt,right=6pt,width=\linewidth]\textbf{Reading Path: \textit{#1}\\}#2\end{tcolorbox}}
+
+\definecolor{matchgray}{gray}{0.92} % light gray
+\definecolor{add}{HTML}{E6FFED} % githubLightGreen
+\definecolor{del}{HTML}{FFEBE9} % githubLightRed
+\newcommand{\match}{\rowcolor{gray!15}}
+\newcommand{\rowAdd}{\rowcolor{githubLightGreen}}
+\newcommand{\rowDel}{\rowcolor{githubLightRed}}
+
+\newcommand{\acmieee}[2]{$\genfrac{}{}{0pt}{}{\small{ACM}}{\small{IEEE}}$}
+
+%% Section starts on new page
+\AddToHook{cmd/section/before}{\clearpage}
+
+%% Fix autoref for algorithms etc.
+\newcommand{\algorithmautorefname}{Algorithm}
+\renewcommand{\theoremautorefname}{Definition}
+\newcommand*{\conceptautorefname}{Concept}
+
+
+% Roman numerals 
+\newcommand{\RNum}[1]{\uppercase\expandafter{\romannumeral #1\relax}}
+
+
+%% Theorem
+\newtheorem{theorem}{Definition}
+\newtheorem{hypothesis}{Hypothesis}
+\newtheorem{problem}{Problem}
+\newtheorem{observation}{Observation}
+\newtheorem{concept}{Concept}
+
+
+%% Code listing with java highlighting
+
+\definecolor{eclipsegreen}{rgb}{0.32, 0.5, 0.39}
+\definecolor{eclipsepurple}{rgb}{0.45, 0.08, 0.32}
+\definecolor{eclipsebrown}{rgb}{0.39, 0.25, 0.25}
+\definecolor{eclipseblue}{rgb}{0.0, 0.0, 1.0}
+\definecolor{eclipseorange}{rgb}{0.8, 0.4, 0.0}
+\definecolor{eclipsemagenta}{rgb}{0.6, 0.0, 0.6}
+
+\lstset{frame=tb, %l
+  numbers=left,
+  %numbersep=0pt,
+  %basicstyle={\small\ttfamily},
+  columns=flexible,
+  breaklines=false,
+  breakatwhitespace=true,
+  language=Java,
+  showspaces=false,
+  showtabs=false,
+  breaklines=true,
+  showstringspaces=false,
+  breakatwhitespace=true,
+  commentstyle=\color{eclipsegreen},
+  keywordstyle=\color{eclipsepurple},
+  stringstyle=\color{eclipseblue},
+  basicstyle=\ttfamily,
+}
+
+\lstset{emph={%  
+    x, y,checked%
+    },emphstyle={\color{eclipsebrown}}%
+}%
+
+% Emphasize classes and methods
+\lstset{emph={%
+    max, result, n, i, square, x, y, checked%
+    },emphstyle={\color{eclipsebrown}}} % Orange for methods/classes
+
+
+% ------------------------- A4 ONLY: ------------------------- %
+%% Caption size a bit bigger:
+\captionsetup{font=small, labelfont={sf,bf,small}}

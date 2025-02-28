@@ -1,0 +1,27 @@
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lrrrrrrrr}
+  \toprule
+Dataset & Variant & Pairs & $p$ & $W$ & $\delta$ & $\delta\,Int.$ & $\delta$ 95\% CI & n \\
+        \midrule
+   \multirow{3}{*}{{PROGpedia-19}}& TSN & P2S & 1 & 11 & -0.036 & Negligible & [-0.33, 0.26] & 27 \\ 
+   & SMM & P2S & 6.5e-06 & 325 & 0.567 & Large & [0.28, 0.76] & 27 \\ 
+   & Both & P2S & 5e-06 & 350 & 0.510 & Large & [0.21, 0.72] & 27 \\
+     \hline
+   \multirow{3}{*}{{PROGpedia-56}}& TSN & P2S & 0.31 & 108 & -0.015 & Negligible & [-0.31, 0.28] & 28 \\ 
+   & SMM & P2S & 2.2e-05 & 253 & 0.462 & Medium & [0.16, 0.68] & 28 \\ 
+   & Both & P2S & 6.5e-06 & 325 & 0.473 & Medium & [0.17, 0.69] & 28 \\ 
+   \hline
+   \multirow{3}{*}{{TicTacToe}} & TSN & P2S & 0.98 & 143 & -0.020 & Negligible & [-0.24, 0.21] & 50 \\ 
+   & SMM & P2S & 5.7e-10 & 1,225 & 0.513 & Large & [0.30, 0.68] & 50 \\ 
+   & Both & P2S & 5.7e-10 & 1,225 & 0.484 & Large & [0.27, 0.65] & 50 \\ 
+  \hline 
+   \multirow{3}{*}{{BoardGame}}& TSN & P2S & 1 & 14 & -0.065 & Negligible & [-0.40, 0.28] & 20 \\ 
+   & SMM & P2S & 4.8e-05 & 210 & 0.430 & Medium & [0.06, 0.70] & 20 \\ 
+   & Both & P2S & 4.8e-05 & 210 & 0.380 & Medium & [0.01, 0.66] & 20 \\
+   \bottomrule
+\end{tabular}
+\caption[Statistical Tests: Refactoring-based Obfuscation]{One-sided Wilcoxon signed-rank test results for \textbf{refactoring-based obfuscation} regarding the improvement by our defense mechanism compared to baseline (sig. level of $\alpha=0.01$, alternative hypothesis $H1=greater$, test statistic $W$, effect size via Cliff's delta $\delta$, its interpretation $\delta\,Int.$, its 95 percent confidence interval $CI$, and the sample size $n$). For plagiarism-to-source pairs (P2S), low $p$ and high $\delta$ are desirable.} 
+\label{tab:to-base-refactor}
+\end{table}
