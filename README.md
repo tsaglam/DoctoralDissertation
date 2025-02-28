@@ -5,7 +5,7 @@ This repository contains the LaTeX source files for my [doctoral dissertation](h
 ## Citation
 
 If you use or reference this dissertation, please cite it as:
-```
+```bibtex
 @phdthesis{Saglam2025,
     author       = {Sa\u{g}lam, Timur},
     year         = {2025},
