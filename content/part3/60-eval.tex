@@ -6,8 +6,8 @@ We evaluate our defense mechanisms (\contribution{3}) regarding obfuscation resi
 Furthermore, we evaluate our approach to modeling plagiarism detection (\contribution{2}) regarding its overall effectiveness with the approach of \citet{Martinez2020} as a baseline, as it is, to our knowledge, the only other detection approach for modeling artifacts.
 Finally, our threat model (\contribution{1}, see \autoref{cha:threatmodel}) is the foundation for this evaluation, as we systematically employ different obfuscation attacks to evaluate our contributions. 
 
-We use real-world datasets from different university courses, including both programming and modeling assignments. These courses range from mandatory undergraduate courses to master's-level elective courses. Furthermore, they contain different-sized programs, from smaller ones with around 100 lines of code to large final projects with around 1500 lines of code.
-With both evaluation parts, we employ a total of \textit{nine} different obfuscation techniques for the plagiarism instance:
+We use real-world datasets from different university courses, including both programming and modeling assignments. These courses range from mandatory undergraduate courses to master 's-level elective courses. Furthermore, they contain different-sized programs, from smaller ones with around 100 lines of code to large final projects with around 1500 lines of code.
+With both evaluation parts, we employ a total of \textit{nine} different obfuscation techniques for the plagiarism instances:
 Insertion, deletion, reordering, refactoring, renaming, simulated random alteration, AI-based obfuscation, AI-based implementation, and human obfuscation.
 We thus systematically address all categories introduced in our threat model (see \autoref{fig:clone-types}).
 %
@@ -38,7 +38,7 @@ Furthermore, we conduct comprehensive statistical tests (we discuss all metrics 
 Crucially, the evaluation also considers the effects on unrelated programs and the effects of our contributions on threshold-based obfuscation. For the former, the metric of choice is the similarity values for all pairs of unrelated programs.
 For the latter, the metrics measure the obfuscation time and the program size after the obfuscation.
 
-The second goal, \gref{2}, maps to \contribution{2} and also to \contribution{3} and aims to enable token-based plagiarism detection for artifacts of modeling assignments. The questions inquiry whether token-based plagiarism detection methods can be applied to modeling artifacts and how well these methods perform compared to the state-of-the-art approach proposed by \citet{Martinez2020}. Furthermore, they focus on the provided resilience to obfuscation attacks in modeling assignments.
+The second goal, \gref{2}, maps to \contribution{2} and also to \contribution{3} and aims to enable token-based plagiarism detection for artifacts of modeling assignments. The questions inquire whether token-based plagiarism detection methods can be applied to modeling artifacts and how well these methods perform compared to the state-of-the-art approach proposed by \citet{Martinez2020}. Furthermore, they focus on the provided resilience to obfuscation attacks in modeling assignments.
 The corresponding metrics are thus centered around the difference in similarity values between pairs of plagiarized and original models.
 %
 The obfuscation types addressed in the questions under G1 and G2 map directly to the threat model associated with \contribution{1}.
@@ -83,8 +83,8 @@ The obfuscation types addressed in the questions under G1 and G2 map directly to
                 \begin{description}[style=unboxed]
                     \footnotesize
                     \item[M1.5] Similarity value differences between generated and student programs (\autoref{def:delta-metrics}).
-                    \item[M1.6] Statistical significance for M1.2 (p-values).
-                    \item[M1.7] Practical significance for M1.2 (effect size).
+                    \item[M1.6] Statistical significance for M1.5 (p-values).
+                    \item[M1.7] Practical significance for M1.5 (effect size).
                     %\item[M1.5] Difference in similarity values between pairs of generated and human programs.
                 \end{description}
             \item[Q1.7] What impact do our contributions have on threshold-based plagiarism generators?
@@ -130,7 +130,7 @@ Both, however, are directly derived from the similarity scores.
 This means the similarity scores strongly guide the human inspection. The detailed view of matching subsequences visualized via matching code fragments is usually then used only after deciding which candidates to inspect. Furthermore, additional post-processing information is usually considered a secondary indicator.
 %\textcolor{red}{However, it's important to consider that similarity metrics significantly impact human decision-making, as the interface presenting these scores can bias instructors toward higher-similarity cases and might result in overlooking more subtle instances of plagiarism.}
 
-Between different plagiarism detection systems, the exact calculation of the similarity score for pairs of programs may vary. The difference is usually subtle, and their effect on the overall results is negligible. In our evaluation, we use the similarity score as calculated by JPlag~\cite{prechelt2000} as it is used as a baseline. This \textit{symmetric similarity} score is detailed in \autoref{theo:avgsim}.
+Between different plagiarism detection systems, the exact calculation of the similarity score for pairs of programs may vary. The difference is usually subtle, and its effect on the overall results is negligible. In our evaluation, we use the similarity score as calculated by JPlag~\cite{prechelt2000} as it is used as a baseline. This \textit{symmetric similarity} score is detailed in \autoref{theo:avgsim}.
 
 
 \begin{figure}[b]
@@ -149,14 +149,14 @@ When evaluating plagiarism detection systems regarding their detection quality, 
 \end{enumerate}
 \autoref{fig:pair-types} illustrates these types of pairs. Note that plagiarism-to-plagiarism pairs only exist when multiple plagiarized instances are created from a single source program. The color scheme in this figure will be used in the remainder of this evaluation for the corresponding pair types.
 
-To clearly distinguish the plagiarism instances from the unrelated programs during human inspection, the similarity scores of plagiarism pairs must be high~\cite{Saglam2024b}. Vice versa, the similarity score for unrelated pair programs must be low. In an ideal world, these types of pairs do not overlap, meaning all plagiarism pairs have higher similarity values than unrelated pairs. However, in practice, this is often not the case. Some overlap is normal, as changes to a plagiarism instance can reduce its similarity to its source. Especially obfuscation techniques reduce this similarity, challenging the ability of the detection system to assess rank programs.
+To clearly distinguish the plagiarism instances from the unrelated programs during human inspection, the similarity scores of plagiarism pairs must be high~\cite{Saglam2024b}. Vice versa, the similarity score for unrelated pair programs must be low. In an ideal world, these types of pairs do not overlap, meaning all plagiarism pairs have higher similarity values than unrelated pairs. However, in practice, this is often not the case. Some overlap is normal, as changes to a plagiarism instance can reduce its similarity to its source. Especially obfuscation techniques reduce this similarity, challenging the ability of the detection system to assess programs.
 For the detection quality, this means that the \textit{difference} between plagiarism pairs and unrelated pairs matters.
 
 A common \textit{anti-pattern} in scientific literature is to choose a threshold when evaluating plagiarism detectors. All similarity values at or above this threshold count as a detection, while all scores below count as not detected. While this makes it easy to derive precision, recall, and F1 scores, this approach is \textit{fundamentally flawed}: By setting such a threshold, the resulting metrics can be arbitrarily influenced. Even when comparing with a baseline approach, this threshold can be chosen to favor one approach over the other.
-\autoref{fig:diff-threshold-abuse} illustrates this for two a two-approach comparison based on a similarity threshold of 80 percent.
+\autoref{fig:diff-threshold-abuse} illustrates this for a two-approach comparison based on a similarity threshold of 80 percent.
 Note that the approach achieves a perfect $F_1$ score while the baseline achieves the worst possible $F_1$ score. Choosing a threshold of 60 percent would produce a perfect $F_1$ score for both. Note that this method does not even consider the changes in the similarity distribution of the original pairs.
 
-As no universal threshold fits any given dataset, very few arguments exist for or against a chosen threshold. Consequentially, all thresholds are chosen arbitrarily. Moreover, as the distribution of similarity values varies greatly between datasets, such a threshold can only be chosen after obtaining the results of the plagiarism detectors, thus making this approach even more critical.
+As no universal threshold fits any given dataset, very few arguments exist for or against a chosen threshold. Consequently, all thresholds are chosen arbitrarily. Moreover, as the distribution of similarity values varies greatly between datasets, such a threshold can only be chosen after obtaining the results of the plagiarism detectors, thus making this approach even more critical.
 Finally, this method does not judge how well plagiarism is detected; rather, it judges only if it is detected (and only according to some arbitrary criterion).
 
 \begin{figure}
@@ -204,7 +204,7 @@ In some cases, outliers can be considered for additional discussions. Outliers a
 \begin{figure}
     \centering
     \includegraphics[width=0.95\linewidth]{figures/methodology/SigMetrics.pdf}
-    \caption[Statistical Testing in Plagiarism Evaluations]{Vizualization of appropriate alternative hypotheses ($H1$) for one-sided significance tests between (paired) plagiarism instances and original student solutions. For plagiarism instances, the location shift should be significantly greater ($H1_{Plag}$); for the originals, the location shift should not be significantly greater ($H1_{Orig}$).}
+    \caption[Statistical Testing in Plagiarism Evaluations]{Visualization of appropriate alternative hypotheses ($H1$) for one-sided significance tests between (paired) plagiarism instances and original student solutions. For plagiarism instances, the location shift should be significantly greater ($H1_{Plag}$); for the originals, the location shift should not be significantly greater ($H1_{Orig}$).}
     \label{fig:sig-metrics}
 \end{figure}
 
@@ -218,7 +218,7 @@ For the practical significance, we use \textit{Cliff's delta} $\delta$~\cite{Cli
 While there is a version of \textit{Cohens d} for paired data, it is only robust to small deviations from normality and strongly affected by outliers, which is why it is unsuitable for the typical distributions of plagiarism pair similarities. While \textit{Cliff's delta} $\delta$ is not ideal for paired data, it can still be applied to assess the magnitude of the difference between paired samples, particularly when focusing on rank-based comparisons requiring robustness to non-normality and variance differences.
 
 There are no established categories to interpret the resulting $\delta$ values. Thus, we base our interpretation on the derived categories by \citet{Romano2006} based on \textit{Cohens d}.
-Note that these categories are often defined somewhat arbitrarily\footnote{An analogy often used is similarly arbitrary t-shirt sizes. The categories for Cohen's D are used for historical reasons rather than empirical evidence. In practice, interpretations should be based on the specific data and the context of the underlying domain. This is why we combine the indicators for significance with similarity difference metrics.} We use the following interpretation:
+Note that these categories are often defined somewhat arbitrarily\footnote{An analogy often used is similarly arbitrary t-shirt sizes. The categories for Cohen's D are used for historical reasons rather than empirical evidence. In practice, interpretations should be based on the specific data and the context of the underlying domain. This is why we combine the indicators for significance with similarity difference metrics.}. We use the following interpretation:
 \begin{equation}
     \delta \, \textit{Interpretation}=
     \begin{cases}
@@ -256,7 +256,7 @@ Note that many of the lower similarity values were omitted for MOSS as it does n
 
 For the evaluation with modeling assignments, we adopt the \ac{LSH} approach developed by \citet{Martinez2020} as our baseline. To the best of our knowledge, this is the only existing plagiarism detection approach designed specifically for modeling artifacts. Given that the detection of plagiarism in modeling assignments presents unique challenges, their approach provides a suitable comparison point.
 %
-The token-based plagiarism detection for modeling artifacts, which is part of \contribution{2}, was implemented based on JPlag, as it is, compared to MOSS, open-source also because it is considered a state-of-the-art tool~\cite{Novak2019, weber2012, Aniceto2021}. Thus, it is considered the approach and not a baseline; thus, we use the approach of \citet{Martinez2020} as a baseline to evaluate our contributions.
+The token-based plagiarism detection for modeling artifacts, which is part of \contribution{2}, was implemented based on JPlag, as it is, compared to MOSS, open-source, and also because it is considered a state-of-the-art tool~\cite{Novak2019, weber2012, Aniceto2021}. Thus, it is considered the approach and not a baseline; thus, we use the approach of \citet{Martinez2020} as a baseline to evaluate our contributions.
 
 In summary, we use state-of-the-art approaches as a baseline for evaluation and can thus show that our contributions outperform the state-of-the-art.
 
@@ -278,7 +278,7 @@ To address these issues, we combine public with internal datasets and carefully 
 We used a total of six real-world datasets; four are publicly available, and two are internal. They all come from an educational setting but stem from different courses and assignment types.
 Thus, they vary in the number and size of the programs, but especially in their programming language.
 First, we used two tasks from the publicly available collection \textit{PROGpedia}~\cite{paiva2023}.
-Here, Task 19 covers the design of graph data structure and a depth-first search to analyze a social network.
+Here, Task 19 covers the design of a graph data structure and a depth-first search to analyze a social network.
 Task 56 concerns minimum spanning trees using Prim's algorithm. Both datasets contain small Java programs.
 For both datasets, we used only syntactically and semantically correct solutions and the latest version of each program.
 
@@ -295,7 +295,7 @@ To prepare the datasets for our evaluation, we removed all solutions that did no
 We also removed all human plagiarism (if present) based on the labeling provided by the datasets. If no labeling was present, we removed verbatim copies.
 This notably reduces the size of some datasets.
 %&Thus, we ended up with the following five datasets (size is measured in lines of code (LOC), excluding comments and empty lines):
-Consequently, we obtained the five datasets listed in \autoref{tab:prog-datasets}.
+Consequently, we obtained the six datasets listed in \autoref{tab:prog-datasets}.
 
 \begin{table}[b]
     \centering
@@ -320,10 +320,10 @@ While public datasets are available for programming assignments, albeit with var
 Artificially constructed datasets offer control over scale, but they lack realism and are, therefore, not a good option either.
 Thus, we use an internal dataset~\cite{Saglam2022} from a \textit{typical}~\cite{Ciccozzi2018} modeling assignment.
 This data set contains 21 metamodels from modeling assignments from a master's level elective practical course on model-driven software development.
-These 21 metamodels are, to the best of our knowledge, free of plagiarism\footnote{As this is a master's level elective course and the students work in groups anyways, there is not much incentive for plagiarism. However, we carefully inspected the solutions on plagiarism to make sure they are free of plagiarism.}.
+These 21 metamodels are, to the best of our knowledge, free of plagiarism\footnote{As this is a master's level elective course and the students work in groups anyway, there is not much incentive for plagiarism. However, we carefully inspected the solutions on plagiarism to make sure they are free of plagiarism.}.
 %Thus, the dataset provides 210 pairs of original, student-made solutions.
 
-The assignment tasks the students in groups of two to five with creating a metamodel for designing component-based system architectures. This metamodel can be used to create models similar to \ac{UML} component diagrams but also involves additional aspects, such as software-to-hardware allocation.
+The assignment tasks the students in groups of two to five to create a metamodel for designing component-based system architectures. This metamodel can be used to create models similar to \ac{UML} component diagrams but also involves additional aspects, such as software-to-hardware allocation.
 A component-based system can be designed using four different view types: A component repository, the component assembly, the environment, and the allocation.
 The \textit{repository} manages all components and interfaces that may be reused within multiple systems. The \textit{assembly} shows how components are instantiated and interconnected. The \textit{environment} depicts all containers and the links between them. The \textit{allocation} specifies which components of the assembly are allocated on which containers of the environment.
 This assignment is loosely based on the Palladio component model~(PCM)~\cite{reussner2016a, becker2008a}.

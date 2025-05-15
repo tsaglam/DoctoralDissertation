@@ -36,8 +36,8 @@ The interested reader can find an evaluation for such obfuscation in \fancycite{
 The first algorithmic obfuscation attack is the insertion of dead statements.
 For this, we employ two different tools. The first one is \mossad~\cite{DevoreMcDonald2020}. As previously discussed, it is indeterministic and operates threshold-based. The second is \textit{PlagGen}~\cite{Broedel2023}, which is similar to \mossad but is deterministic and exhaustive (see \autoref{sec:threatmodel-automation}). In both cases, the statement insertion uses statements from the original program and a pool of pre-defined statements. Furthermore, both ensure that the inserted statements do not change the behavior of the programs. Thus, this obfuscation attack is semantic-preserving. We use PlagGen for Java and \mossad for C++, as these are the languages supported by each tool.
 %
-Second, we employ the refactoring-based obfuscation attack by \citet{Maisch2024}, which leverages \textit{Spoon}~\cite{Pawlak2006} automatically applies semantic-preserving refactoring operations at random positions at the AST-level to obfuscate a program.
-In detail, the refactoring operations include optional wrapping, extracting expressions as new variables, introduction of constant container classes and extraction of constants, swapping of if-else-statements and inverting the corresponding conditions, insertion of methods and constructors, and the introduction of access methods for existing fields.
+Second, we employ the refactoring-based obfuscation attack by \citet{Maisch2024}, which leverages \textit{Spoon}~\cite{Pawlak2006} and automatically applies semantic-preserving refactoring operations at random positions at the AST-level to obfuscate a program.
+In detail, the refactoring operations include optional wrapping, extracting expressions as new variables, introducing constant container classes and extraction of constants, swapping of if-else-statements and inverting the corresponding conditions, insertion of methods and constructors, and the introduction of access methods for existing fields.
 As the behavior of the programs is not changed, this obfuscation attack is also semantic preserving.
 This implementation of the obfuscation attack only supports Java programs, so we only use four of the six datasets with this obfuscation attack.
 %
@@ -54,7 +54,7 @@ Finally, we use full generation as the final obfuscation. However, we can only e
 AI-based obfuscation is a semantic agnostic attack. While the prompts contain instructions to preserve the program behavior, there are generally no guarantees that the changes proposed by GPT-4 conform to these instructions. 
 Similarly, for AI-based generation, there is no guarantee that the programs fully implement all details requested by the task.
 %%%%%%%
-In sum, we use the following four techniques attacks to create 787 plagiarized programs (see \autoref{tab:plagiate} for details):
+In sum, we use the following five techniques to create 787 plagiarized programs (see \autoref{tab:plagiate} for details):
 \begin{enumerate}[noitemsep]
  \item \textbf{Insertion-based Obfuscation} (semantic-preserving): Inserting new and existing statements into the program (PlagGen~\cite{Broedel2023} for Java and \mossad~\cite{DevoreMcDonald2020} for C/C++).
  \item \textbf{Refactoring-based Obfuscation} (semantic-preserving): Applying a variety of semantic-preserving refactoring operations, for example, transformations of control structures, field access, and method granularity~\cite{Maisch2024}.
@@ -73,7 +73,7 @@ However, focusing solely on the attacks on a program level overlooks the broader
     \setlength{\tabcolsep}{5pt}
 	\begin{tabular}{lcccccc}
 		\toprule
-		Obfuscation Attack Type  & PROGp.-19 & PROGp. & Homew.-1 & Homew.-5 & TTT & BoardGame\\
+		Obfuscation Attack Type  & PROGp.-19 & PROGp.-56 & Homew.-1 & Homew.-5 & TTT & BoardGame\\
 		%Type                     & PROGpedia-19 & PROGpedia-56 & Homework-1 & Homework-5 & TicTacToe \\
 		\midrule
 		Insertion-based Obf. & 27    & 28    & 59   & 17   & 50 & 20 \\
@@ -94,7 +94,7 @@ This section presents the evaluation results for our defense mechanisms, demonst
 
 In the following, we will discuss the results of each obfuscation attack type \textit{individually}. As using different obfuscation attacks only affects the plagiarism instances, the unrelated programs of each dataset remain the same for all evaluation stages. Thus, we first discuss the effect of our defense mechanism on unrelated programs.
 
-As discussed in \autoref{fig:clone-types}, we illustrate the results via boxplots, calculate difference metrics for selected statistical measures, and conduct statistical tests to analyze statistical and practical significance. As this is done for each of the five obfuscation attack types and the baseline for each of the applicable datasets, as well as for the baseline, TSN, SMM, and the combination of the former two, we conduct a total of 72 statistical tests and calculate 228 difference values.
+As discussed in \autoref{cha:methodology}, we illustrate the results via boxplots, calculate difference metrics for selected statistical measures, and conduct statistical tests to analyze statistical and practical significance. As this is done for each of the five obfuscation attack types and the baseline for each of the applicable datasets, as well as for the baseline, TSN, SMM, and the combination of the former two, we conduct a total of 72 statistical tests and calculate 228 difference values.
 
 The interplay of multiple obfuscation techniques, datasets, and defense mechanisms, combined with the sheer number of statistical comparisons, naturally contributes to the complexity of the results. Despite this inherent complexity, we made every effort to present them in a manner that is as straightforward as possible. 
 However, this complexity reflects the rigor of the analysis, which is essential to fully assess the effectiveness of the proposed defense mechanisms.
@@ -132,7 +132,7 @@ Again, these changes are statistically significant for three of the six datasets
 \autoref{fig:stage1-results} shows the results for obfuscation attacks based on inserting statements into plagiarized programs.
 \autoref{tab:diff-insert} shows the corresponding statistical measures.
 % ATTACK TYPE REFRESHER TEXT
-As discussed previously, we use \mossad~\cite{DevoreMcDonald2020} for the C++-based datasets Homework-1 and Homework-5. For all others, we use PlagGen~\cite{Broedel2023}. Note that the main difference between both plagiarism generators is the termination criterion, as \mossad operates threshold-based while PlagGen employs an exhaustive strategy.
+As discussed previously, we use \mossad~\cite{DevoreMcDonald2020} for the C++-based datasets Homework-1 and Homework-5. For all others, we use PlagGen~\cite{Broedel2023}. Note that the main difference between both plagiarism generators is the termination criterion, as \mossad operates threshold-based, while PlagGen employs an exhaustive strategy.
 
 Note that there is a disparity between the token sequence normalization implementation between Java and C++\footnote{This concerns the step of adding semantic information to the token sequence, which is the only part of token sequence normalization that is not language-independent.}.
 It stems from the complex nature of C++, which includes substantial undefined behavior and highly expressive syntax, which raises the engineering effort required to address all edge cases effectively. However, this limitation is purely technical.
@@ -188,7 +188,7 @@ It stems from the complex nature of C++, which includes substantial undefined be
 %\multirow{3}{*}{Effects of Normalization} 
 
 \subsubsection{Baseline}
-\autoref{fig:stage1-results} illustrates the drastic impact of insertion-based obfuscation attack on the baseline.
+\autoref{fig:stage1-results} illustrates the drastic impact of insertion-based obfuscation attacks on the baseline.
 For the baseline, the median similarity values for plagiarism pairs (true positives) drop to between 5.29 percent (TicTacToe) and 19.59 percent (PROGpedia-56), depending on the dataset.
 This results in a complete overlap between plagiarism and original pairs for all datasets except PROGpedia-56. Here, however, we can still observe a substantial overlap.
 
@@ -269,7 +269,7 @@ Our results, thus, show that combining both defense mechanisms provides signific
 \autoref{fig:stage2-results} shows the results for obfuscation attacks based on random alterations of the token sequence.
 \autoref{tab:diff-alter} shows the corresponding statistical measures.
 % ATTACK TYPE REFRESHER TEXT
-As discussed, these attacks are simulated, meaning 25\% of the token sequence is directly replaced by another random token. While this is thus not a real obfuscation attack, it simulates the effect of a very strong obfuscation attacks. As these simulated alterations could be caused by both semantic-preserving and semantic-altering obfuscation attacks, we consider this evaluation state semantic-agnostic. However, as this simulated obfuscation is done after the tokenization, it cannot be evaluated with the Token Sequence normalization, which partially takes place \textit{during} the tokenization.
+As discussed, these attacks are simulated, meaning 25\% of the token sequence is directly replaced by another random token. While this is thus not a real obfuscation attack, it simulates the effect of a very strong obfuscation attack. As these simulated alterations could be caused by both semantic-preserving and semantic-altering obfuscation attacks, we consider this evaluation state semantic-agnostic. However, as this simulated obfuscation is done after the tokenization, it cannot be evaluated with the Token Sequence normalization, which partially takes place \textit{during} the tokenization.
 Thus, we only evaluate this obfuscation attack for subsequence match merging and the baseline.
 
 \begin{table}[h]
@@ -533,7 +533,7 @@ These values are similar to the baseline. While slightly better for both PROGped
 
 The results of the statistical test (see \autoref{tab:to-base-gpt-obf}) show \textit{some} statistical significance; however, they show no practical significance.
 Regarding statistical significance, we observe low p-values for the improvements with the PROGpedia-19 and the TicTacToe datasets, thus indicating statistical significance.
-For the other three datasets, however, the p-values above the selected $\alpha$, thus representing statistically insignificant results.
+For the other three datasets, however, the p-values are above the selected $\alpha$, thus representing statistically insignificant results.
 Regarding practical significance, the effect size shows reduced similarity values through negative values for the Homework datasets. However, the effect size is close to zero for all datasets, and the practical significance is thus negligible.
 In sum, token sequence normalization provides no significant resilience against GPT-4-based obfuscation attacks. However, it also does not bring any significant drawbacks.
 
@@ -585,19 +585,6 @@ Yet, our defense mechanisms improve detection despite the potentially disruptive
 \end{figure}
 
 \subsection{GPT-4-generated Programs}\label{sec:eval-gptgen}
-
-% FIGURE TEXT
-% ATTACK TYPE REFRESHER TEXT
-\autoref{fig:stage3-results} shows the results for obfuscation attacks via GPT-4 prompts. 
-\autoref{tab:diff-gpt-obf} shows the corresponding statistical measures.
-We used 15 different prompts, asking the LLM to alter the program without changing its behavior. %However, we did not check if the behavior was actually preserved. \todoNils{Wurde das Verhalten manchmal verändert?}
-There are no guarantees that the behavior will be preserved, thus making this obfuscation attack a semantic-agnostic one.
-
-It is important to note that the BoardGame dataset was excluded from the evaluation involving AI-based datasets. This dataset originates from a final exam and is highly sensitive. Consequently, we must not submit the programs to the OpenAI server hosting GPT-4 as part of the obfuscation process.
-
-
-
-
 \autoref{fig:stage4-results} shows the results for programs generated via GPT-4 based on the assignment description.
 \autoref{tab:diff-gpt-gen} shows the corresponding statistical measures.
 Unlike in the previous three evaluation stages, we \textit{technically} do not employ obfuscation attacks. The generated programs are not derived from human-made programs. 
@@ -632,7 +619,7 @@ Since this evaluation stage required the full textual assignment description, we
 \autoref{fig:stage4-results} illustrates the results for GPT-4-generated programs.
 For the baseline, the similarity values for generated program pairs (true positives) are mostly below 50 percent, with a median similarity of 20.63 percent.
 This reflects the inherent indeterminism in generative AI, as these programs were generated from the same assignment description.
-However, the similarity of unrelated human-made programs for the same assignment is mostly below 25 percent, with a median similarity of 6,06 percent.
+However, the similarity of unrelated human-made programs for the same assignment is mostly below 25 percent, with a median similarity of 6.06 percent.
 This means that even for our baseline, the generated programs are significantly more similar to each other than human-made programs.
 
 Nevertheless, there is still some overlap. 
@@ -782,7 +769,7 @@ Our evaluation demonstrates the effectiveness of the proposed defense mechanisms
     
     \item[GPT-4-generated Programs (\autoref{sec:eval-gptgen}):] Despite our defense mechanisms not being tailored for AI-generated program detection, we observe improved detection rates. Token sequence normalization has no positive or negative impact on detecting AI-generated programs. Subsequence match merging provides significant improvements, with a median similarity increase of 6.5 percentage points, highlighting its adaptability.
     
-    \item[Threshold-based Plagiarism (\autoref{sec:eval-mossad}):] The defense mechanisms substantially increase the computational cost of threshold-based obfuscation, prolonging obfuscation time up to 6 hours per program and inflating program size by up to 1300\%, making such an obfuscation method more tedious and also easily detectable with via metrics such as program size or number of tokens.
+    \item[Threshold-based Plagiarism (\autoref{sec:eval-mossad}):] The defense mechanisms substantially increase the computational cost of threshold-based obfuscation, prolonging obfuscation time up to 6 hours per program and inflating program size by up to 1300\%, making such an obfuscation method more tedious and also easily detectable with metrics such as program size or number of tokens.
 \end{description}
 
 
@@ -838,7 +825,7 @@ Except for insertion-based obfuscation (see \autoref{fig:stage1-results}), where
 In practical terms, some overlap among outliers is not a significant concern. It is essential to recognize that no plagiarism detection tool is perfect. Thus, educators must accept that human inspection is always the final step in plagiarism detection and that no one should solely rely on the results of an automated tool without first verifying the flagged candidates themselves. 
 %educators must accept that there will always be a possibility of false positives—instances where unrelated programs are mistakenly flagged as suspicious. Nevertheless, these false positives are not common.
 
-Furthermore, it is crucial to note that plagiarism detectors compare pairs of programs instead, and thus, plagiarize might be included in multiple comparisons. This means that detecting every plagiarism pair is not necessary to identify all students involved in plagiarism. In practice, educators would be presented with a ranked list of suspicious pairs, which includes both unrelated pairs and plagiarism pairs.
+Furthermore, it is crucial to note that plagiarism detectors compare pairs of programs, and thus, a single program might be included in multiple comparisons. This means that detecting every plagiarism pair is not necessary to identify all students involved in plagiarism. In practice, educators would be presented with a ranked list of suspicious pairs, which includes both unrelated pairs and plagiarism pairs.
 
 As an example, in our evaluation of GPT-4-generated programs, it is not necessary to identify all 1,225 pairs of AI-generated programs to detect each of the 50 generated programs at least once.
 Notably, when both of our defense mechanisms are enabled (\textit{Both} in \autoref{fig:stage4-results}), only the first 158 pairs (which is the top 0.07 percent out of all 220,780 analyzed pairs) need to be inspected to successfully identify 90 percent of the AI-generated programs at least once. To detect all 50 AI-generated programs, the first 711 pairs need to be checked, which is the top 0.3 percent of all pairs, underscoring that a small overlap between the pairs of unrelated programs and the plagiarism pairs is not a cause for concern.
@@ -926,7 +913,7 @@ Additionally, attack-specific mechanisms can only be designed for known attacks 
 Attack-independent mechanisms, such as subsequence match merging, make fewer assumptions about the obfuscation techniques in use. Thus, they provide less resilience for a given obfuscation attack. 
 Their strength, however, lies in providing broad resilience.
 Throughout our evaluation, we observed that subsequence match merging consistently offered resilience across a variety of obfuscation attacks.
-Because of its heuristic nature and the fact that it operates at a high level of abstraction, it can provide \textit{some} resilience against unknown and emerging obfuscation attacks\footnote{As discussed in \autoref{sec:threatmodel-analysis}, all obfuscation attacks need to affect the token sequence, thus interrupting the subsequence matching, to have any effect on a token-based plagiarism detector.}
+Because of its heuristic nature and the fact that it operates at a high level of abstraction, it can provide \textit{some} resilience against unknown and emerging obfuscation attacks\footnote{As discussed in \autoref{sec:threatmodel-analysis}, all obfuscation attacks need to affect the token sequence, thus interrupting the subsequence matching, to have any effect on a token-based plagiarism detector.}.
 Attack-independent approaches are essential for defending against emerging threats.
 Since they make fewer assumptions about the nature of incoming obfuscation attacks, they offer a level of protection against unknown attacks that attack-specific mechanisms may not.
 
@@ -968,7 +955,7 @@ External validity concerns the extent to which our findings can be generalized b
     \textbf{Tool Independence:} Our defense mechanisms are tool-independent, enabling use in token-based and even some other structure-based plagiarism detectors, enhancing their general applicability.
     We evaluated our defense mechanism only using JPlag as the baseline, as other tools are either not applicable to all datasets, closed-source, or provide restricted results. However, this is not a threat to generalizability, as JPlag is considered state-of-the-art~\cite{Novak2019, Aniceto2021} and operates similarly to other widely used tools, reinforcing the generalizability of our findings.
 
-    \textbf{Influence of Prompt Quality:} To address the impact of prompt choice for AI-based obfuscation, we performed systematic "\textit{prompt-engineering}" prior to the evaluation. We then evaluated with 15 suitable different prompts. We generated multiple plagiarism instances for each prompt, which we repeated for multiple datasets. While the impact of the prompt varies (see \autoref{fig:stage3-results-byprompt}), the variation is not strong enough to obscure the overall trend. Thus, we observe consistent patterns of obfuscation resilience across prompts, supporting the generalizability of our results.
+    \textbf{Influence of Prompt Quality:} To address the impact of prompt choice for AI-based obfuscation, we performed systematic "\textit{prompt-engineering}" prior to the evaluation. We then evaluated with 15 different suitable prompts. We generated multiple plagiarism instances for each prompt, which we repeated for multiple datasets. While the impact of the prompt varies (see \autoref{fig:stage3-results-byprompt}), the variation is not strong enough to obscure the overall trend. Thus, we observe consistent patterns of obfuscation resilience across prompts, supporting the generalizability of our results.
 
 \subsection{Construct Validity}
 Construct validity refers to how well the evaluation measures its intended purpose and whether the metrics and baselines chosen are appropriate. Thus, it refers to the degree to which we measure theoretical construct we intend to measure.

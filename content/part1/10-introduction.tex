@@ -65,7 +65,7 @@ All obfuscation attacks targeting software plagiarism detectors, regardless of w
 %
 Their intended outcome is to disrupt the matching of fragments between programs, thus leading to a reduced similarity score~\cite{DevoreMcDonald2020}.
 Specifically, the goal is to prevent the detector from matching fragments above the specified match length cut-off threshold.
-However, to impact the detection quality of a software plagiarism detector, the obfuscation must affect the linearized program representation of the detector. Consequentially, modifications to the program code that do not affect the internal program representation are inherently ineffective. For example, renaming program elements does not affect token-based approaches, as names are omitted in the internal program representation~\cite{prechelt2000, Saglam2024a}.
+However, to impact the detection quality of a software plagiarism detector, the obfuscation must affect the linearized program representation of the detector. Consequently, modifications to the program code that do not affect the internal program representation are inherently ineffective. For example, renaming program elements does not affect token-based approaches, as names are omitted in the internal program representation~\cite{prechelt2000, Saglam2024a}.
 %
     \begin{observation} \label{obs1} To be effective, any obfuscation attack targeting state-of-the-art detectors must alter the program code to affect the internal representation of plagiarism detectors, thereby interfering with the detection process.
     \end{observation}

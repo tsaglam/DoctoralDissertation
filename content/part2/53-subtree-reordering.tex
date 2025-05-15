@@ -162,12 +162,12 @@ This approach ensures that the elements within a model are consistently ordered,
 		\State{$V \gets$ empty list of vectors}
         \For{$e_i \in E$}
 		      \State{$v_i \gets$ calculate token type vectors for subtree of $e_i$}
-            \State{$v_i \gets$ euclidean norm $\|\mathbf{v_i}\|_2 $}
+            \State{$v_i \gets$ Euclidean norm $\|\mathbf{v_i}\|_2 $}
 		\EndFor
   
         \State{$D \gets$ empty distance matrix with size $n \times n$ }
 		\For{$v_i, v_j \in V$}
-		      \State{$d_{i,j} \gets$ euclidean distance $d_{\mathrm{E}}({v_i}, {v_j})$}
+		      \State{$d_{i,j} \gets$ Euclidean distance $d_{\mathrm{E}}({v_i}, {v_j})$}
 		\EndFor
   
 		\State{$v_{max} \gets$ vector in $V$ of element with largest subtree}
