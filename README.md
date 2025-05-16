@@ -1,6 +1,6 @@
 # Mitigating Automated Obfuscation Attacks on Software Plagiarism Detection Systems
 
-This repository contains the LaTeX source files for my [doctoral dissertation](https://doi.org/10.5445/IR/1000179018).
+This repository contains the LaTeX source files for my [doctoral dissertation](https://doi.org/10.5445/IR/1000179018/v2).
 
 ## Citation
 
@@ -10,7 +10,7 @@ If you use or reference this dissertation, please cite it as:
     author       = {Sa\u{g}lam, Timur},
     year         = {2025},
     title        = {Mitigating Automated Obfuscation Attacks on Software Plagiarism Detection Systems},
-    doi          = {10.5445/IR/1000179018},
+    doi          = {10.5445/IR/1000179018/v2},
     publisher    = {{Karlsruhe Institute of Technology (KIT)}},
     pagetotal    = {264},
     school       = {Karlsruhe Institute of Technology  (KIT)},
